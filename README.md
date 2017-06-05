@@ -1,5 +1,4 @@
-# Kylo Docker Layers and Services
-# Daniel Malczyk, dmalczyk@gmail.com
+## Kylo Docker Layers and Services
 
 The work is based on Keven Wang's Kylo in Docker: https://github.com/keven4ever/kylo_docker/tree/multi_container
 
@@ -14,6 +13,8 @@ https://docs.google.com/document/d/1nWLF5cOm2nEC-y-LmOK4AcdtNRfTNRcgB9CcGxPbU74/
 
 So far, the NiFi layer is ready:
 
+```
 docker build -t "kylo_nifi:latest" -f Dockerfile-nifi .
 docker run -d -p8079:8079 --name kylo_nifi kylo_nifi:latest
 docker stack deploy -c docker-compose.yml kylo_stack
+```
