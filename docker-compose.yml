@@ -1,0 +1,21 @@
+version: "3"
+services:
+  kylo:
+    image: kylo_nifi:latest
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 5G
+      restart_policy:
+        condition: on-failure
+        delay: 60s
+        max_attempts: 3
+        window: 180s        
+    ports:
+      - "8079:8079"
+    networks:
+      - kylonet
+networks:
+  kylonet:
