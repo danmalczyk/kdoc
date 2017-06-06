@@ -18,3 +18,9 @@ docker build -t "kylo_nifi:latest" -f Dockerfile-nifi .
 docker run -d -p8079:8079 --name kylo_nifi kylo_nifi:latest
 docker stack deploy -c docker-compose.yml kylo_stack
 ```
+
+## TODO
+docker-compose.yml:
+change/parametrize MYSQL_ROOT_PASSWORD
+set resource limits (memory, cpu)
+mariadb data directory volume

@@ -1,7 +1,7 @@
 version: "3"
 services:
   kylo:
-    image: kylo_nifi:latest
+    image: dmalczyk/kylo-nifi:latest
     deploy:
       replicas: 1
       resources:
@@ -17,5 +17,64 @@ services:
       - "8079:8079"
     networks:
       - kylonet
+  mariadb:
+    image: mariadb:latest
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1G
+      restart_policy:
+        condition: on-failure
+        delay: 60s
+        max_attempts: 3
+        window: 180s     
+    environment:
+        MYSQL_ROOT_PASSWORD: hadoop
+    ports:
+      - "3306:3306"
+    networks:
+      - kylonet
+  elasticsearch:  
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.4.1    
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1G
+      restart_policy:
+        condition: none
+        delay: 60s
+        max_attempts: 3
+        window: 180s     
+#    environment:
+#      - bootstrap.memory_lock=true
+#      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+#    ulimits:
+#      memlock:
+#        soft: -1
+#        hard: -1
+#    volumes:
+#      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - kylonet
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    networks:
+      - kylonet
+volumes:
+  esdata:
+    driver: local
 networks:
   kylonet:
