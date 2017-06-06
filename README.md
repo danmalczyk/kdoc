@@ -19,6 +19,6 @@ docker stack deploy -c docker-compose.yml kylo_stack
 
 ## TODO
 docker-compose.yml:
-change/parametrize MYSQL_ROOT_PASSWORD
-set resource limits (memory, cpu)
-mariadb data directory volume
+change/parametrize MYSQL_ROOT_PASSWORD,
+set resource limits (memory, cpu),
+mariadb data directory volume,

@@ -1,29 +1,12 @@
 version: "3"
 services:
-  kylo:
-    image: dmalczyk/kylo-nifi:latest
-    deploy:
-      replicas: 1
-      resources:
-        limits:
-          cpus: "0.5"
-          memory: 5G
-      restart_policy:
-        condition: on-failure
-        delay: 60s
-        max_attempts: 3
-        window: 180s        
-    ports:
-      - "8079:8079"
-    networks:
-      - kylonet
   mariadb:
     image: mariadb:latest
     deploy:
       replicas: 1
       resources:
         limits:
-          cpus: "0.5"
+          cpus: "0.1"
           memory: 1G
       restart_policy:
         condition: on-failure
@@ -42,16 +25,16 @@ services:
       replicas: 1
       resources:
         limits:
-          cpus: "0.5"
-          memory: 1G
+          cpus: "0.3"
+          memory: "2.5G"
       restart_policy:
-        condition: none
+        condition: on-failure
         delay: 60s
         max_attempts: 3
         window: 180s     
-#    environment:
+    environment:
 #      - bootstrap.memory_lock=true
-#      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
 #    ulimits:
 #      memlock:
 #        soft: -1
@@ -59,9 +42,45 @@ services:
 #    volumes:
 #      - esdata:/usr/share/elasticsearch/data
     ports:
-      - 9200:9200
+      - "9200:9200"
+      - "9300:9300"
     networks:
       - kylonet
+  activemq:
+    image: rmohr/activemq:5.14.3-alpine
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.3"
+          memory: "2G"
+      restart_policy:
+        condition: none
+        delay: 60s
+        max_attempts: 3
+        window: 180s     
+    ports:
+      - "61616:61616"
+      - "8161:8161"
+    networks:
+      - kylonet    
+  kylo:
+    image: dmalczyk/kylo-nifi:latest
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 4G
+      restart_policy:
+        condition: on-failure
+        delay: 60s
+        max_attempts: 3
+        window: 180s        
+    ports:
+      - "8079:8079"
+    networks:
+      - kylonet      
   visualizer:
     image: dockersamples/visualizer:stable
     ports:
