@@ -6,7 +6,7 @@ FROM airhacks/java
 
 MAINTAINER Daniel Malczyk <dmalczyk@gmail.com>
 
-# create kylo user and group
+# create nifi user and group
 RUN /bin/bash -c 'useradd -r -m -s /bin/bash nifi'
 
 # download and install NiFi with Kylo-provided script

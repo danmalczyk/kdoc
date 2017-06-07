@@ -1,0 +1,57 @@
+# Daniel Malczyk
+# ThinkBig Analytics, a Teradata Company
+
+#starting from NiFi image
+FROM dmalczyk/kylo-nifi:latest
+
+MAINTAINER Daniel Malczyk <dmalczyk@gmail.com>
+
+#Install hadoop
+
+#Install spark
+
+# add spark and hadoop path to PATH env variable for kylo user
+RUN echo "export PATH=$PATH:/usr/java/default/bin:/usr/local/spark/bin:/usr/local/hadoop/bin" >> /etc/profile
+
+# Install hive
+RUN wget http://apache.mirrors.spacedump.net/hive/hive-2.1.1/apache-hive-2.1.1-bin.tar.gz && tar xvf apache-hive-2.1.1-bin.tar.gz && rm ./apache-hive-2.1.1-bin.tar.gz
+RUN mv ./apache-hive-2.1.1-bin /usr/local/
+RUN ln -s /usr/local/apache-hive-2.1.1-bin /usr/local/hive
+COPY conf/hive-site.xml /usr/local/hive/conf
+RUN echo "export HIVE_HOME=/usr/local/hive" >> /etc/profile
+RUN echo "export PATH=$PATH:/usr/local/hive/bin">> /etc/profile
+ENV HIVE_HOME /usr/local/hive
+ENV PATH $PATH:$HIVE_HOME/bin
+# Create directory for hive logs
+RUN mkdir -p /var/log/hive
+# Increase PermGen space for hiveserver2 to fix OOM pb.
+COPY conf/hive-env.sh /usr/local/hive/conf/
+
+RUN echo "HADOOP_HOME=/usr/local/hadoop" >> /usr/local/hive/bin/hive-config.sh
+
+# Download mysql jdbc driver and prepare hive metastore.
+RUN wget http://central.maven.org/maven2/mysql/mysql-connector-java/5.1.41/mysql-connector-java-5.1.41.jar && mv mysql-connector-java-5.1.41.jar /usr/local/apache-hive-2.1.1-bin/lib/
+RUN cd /usr/local/hive/scripts/metastore/upgrade/mysql/ && mysql -uroot -phadoop -e "CREATE DATABASE hive;" && mysql -uroot -phadoop hive < ./hive-schema-2.1.0.mysql.sql
+# create hiveserver2 service
+COPY conf/hive-server2 /etc/init.d/
+RUN chmod +x /etc/init.d/hive-server2
+RUN chkconfig --add /etc/init.d/hive-server2
+# ---- Hive installation finished -------
+
+# Prepare spark-hive integration, so spark sql will use hive tables defined in hive metastore, see https://spark.apache.org/docs/1.6.0/sql-programming-guide.html#hive-tables
+RUN cp /usr/local/hadoop/etc/hadoop/hdfs-site.xml /usr/local/spark/conf
+RUN cp /usr/local/hive/conf/hive-site.xml /usr/local/spark/conf
+RUN cp /usr/local/hive/lib/mysql-connector-java-5.1.41.jar /usr/local/spark/lib
+# Make mysql driver available to kylo-spark-shell
+RUN cp /usr/local/apache-hive-2.1.1-bin/lib/mysql-connector-java-5.1.41.jar /opt/nifi/mysql/
+# ----- Spark-Hive integration finished ---------
+
+COPY conf/core-site.xml.template2 /usr/local/hadoop/etc/hadoop/
+
+COPY scripts/hadoop_bootstrap.sh /etc/hadoop_bootstrap.sh
+RUN chown root.root /etc/hadoop_bootstrap.sh
+RUN chmod 700 /etc/hadoop_bootstrap.sh
+
+ENTRYPOINT ["/etc/hadoop_bootstrap.sh"]
+
+EXPOSE 10000

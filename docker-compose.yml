@@ -1,7 +1,7 @@
 version: "3"
 services:
   mariadb:
-    image: mariadb:latest
+    image: mariadb:10.0
     deploy:
       replicas: 1
       resources:
@@ -39,15 +39,15 @@ services:
 #      memlock:
 #        soft: -1
 #        hard: -1
-#    volumes:
-#      - esdata:/usr/share/elasticsearch/data
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
       - "9300:9300"
     networks:
       - kylonet
   activemq:
-    image: rmohr/activemq:5.14.3-alpine
+    image: rmohr/activemq:5.13.3
     deploy:
       replicas: 1
       resources:
@@ -64,34 +64,34 @@ services:
       - "8161:8161"
     networks:
       - kylonet    
-  kylo:
-    image: dmalczyk/kylo-nifi:latest
-    deploy:
-      replicas: 1
-      resources:
-        limits:
-          cpus: "0.5"
-          memory: 4G
-      restart_policy:
-        condition: on-failure
-        delay: 60s
-        max_attempts: 3
-        window: 180s        
-    ports:
-      - "8079:8079"
-    networks:
-      - kylonet      
-  visualizer:
-    image: dockersamples/visualizer:stable
-    ports:
-      - "8080:8080"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    deploy:
-      placement:
-        constraints: [node.role == manager]
-    networks:
-      - kylonet
+#  kylo:
+#    image: dmalczyk/kylo:latest
+#    deploy:
+#      replicas: 1
+#      resources:
+#        limits:
+#          cpus: "0.5"
+#          memory: 4G
+#      restart_policy:
+#        condition: on-failure
+#        delay: 60s
+#        max_attempts: 3
+#        window: 180s        
+#    ports:
+#      - "8079:8079"
+#    networks:
+#      - kylonet      
+#  visualizer:
+#    image: dockersamples/visualizer:stable
+#    ports:
+#      - "8080:8080"
+#    volumes:
+#      - "/var/run/docker.sock:/var/run/docker.sock"
+#    deploy:
+#      placement:
+#        constraints: [node.role == manager]
+#    networks:
+#      - kylonet
 volumes:
   esdata:
     driver: local
