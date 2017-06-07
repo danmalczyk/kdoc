@@ -1,5 +1,10 @@
 # Daniel Malczyk
 # ThinkBig Analytics, a Teradata Company
+FROM alpine:latest
+
+CMD ["/bin/sh"]
+# Daniel Malczyk
+# ThinkBig Analytics, a Teradata Company
 
 #basic image with CentOS and latest JDK
 FROM airhacks/java
