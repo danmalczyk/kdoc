@@ -14,6 +14,11 @@ https://docs.google.com/presentation/d/1s-uNcb0QwEIYUqmN_-c-QqVRTYM5_AxluYp9Nxy_
 ## CURRENT STATUS
 The containers are ready but the Kylo image doesn't boot properly.
 
+## HOW TO RUN
+Change "vm.max_map_count" kernel variable in the VM running docker daemon: https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-cli-run-prod-mode.
+Increase memory dedicated for Docker (Preferences -> Advanced, currently 10G)
+For debugging purposes, Kylo rpm should be now in ./kylo_rpm/kylo.rpm (not included, download from http://bit.ly/2r4P47A)
+
 ```
 docker swarm init
 docker stack deploy -c docker-compose.yml kylo_stack
@@ -28,5 +33,9 @@ set resource limits (memory, cpu),
 externalize mariadb data directory volume
 ```
 ```
-externalizing volumes with the data
-using kylo-ui and kylo-services wars and jars instead of kylo.rpm or kylo.tar
+externalize kylo and nifi volumes with user data (maybe elasticsearch too?)
+use kylo-ui and kylo-services wars and jars from maven build instead of kylo.rpm or kylo.tar
+make Kylo jars thinner, i.e. change jars and wars dependencies so that external framework libs (Spring) etc are in the image before Kylo jars
+separate Hadoop services to another container
+tune Elasticsearch
+```

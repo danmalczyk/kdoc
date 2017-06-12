@@ -7,7 +7,7 @@ services:
       resources:
         limits:
           cpus: "0.1"
-          memory: 1G
+          memory: "0.5G"
       restart_policy:
         condition: on-failure
         delay: 60s
@@ -25,8 +25,8 @@ services:
       replicas: 1
       resources:
         limits:
-          cpus: "0.3"
-          memory: "2.5G"
+          cpus: "0.6"
+          memory: "1.5G"
       restart_policy:
         condition: on-failure
         delay: 60s
@@ -53,9 +53,9 @@ services:
       resources:
         limits:
           cpus: "0.3"
-          memory: "2G"
+          memory: "0.5G"
       restart_policy:
-        condition: none
+        condition: on-failure
         delay: 60s
         max_attempts: 3
         window: 180s     
@@ -66,14 +66,15 @@ services:
       - kylonet    
   kylo:
     image: dmalczyk/kylo:latest
+    command: ["-d"]
     deploy:
       replicas: 1
       resources:
         limits:
-          cpus: "0.5"
-          memory: 4G
+          cpus: "0.6"
+          memory: "5.5G"
       restart_policy:
-        condition: on-failure
+        condition: none
         delay: 60s
         max_attempts: 3
         window: 180s        

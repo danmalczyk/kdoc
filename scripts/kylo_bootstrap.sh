@@ -2,6 +2,9 @@
 
 /etc/hadoop_bootstrap.sh
 
+#echo "Sleeping 120s (waiting for the stack to stabilize)..."
+#sleep 120
+
 echo "Starting NiFi"
 /opt/nifi/current/bin/nifi.sh start
 
@@ -9,9 +12,9 @@ echo "Starting NiFi"
 echo "Setup Kylo database in MySQL"
 /opt/kylo/setup/sql/mysql/setup-mysql.sh mariadb root hadoop
 
-# sleep 30 sec to make sure nifi is ready
+# sleep 240 sec to make sure nifi is ready
 echo "Sleeping 30s (waiting for NiFi)..."
-sleep 30s
+sleep 30
 
 echo "Starting kylo apps"
 #/opt/kylo/start-kylo-apps.sh
@@ -22,8 +25,7 @@ echo "Starting kylo apps"
 cp -r /var/sampledata/* /var/dropzone/
 
 
-#CMD=${1:-"exit 0"}
-CMD="-d"
+CMD=${1:-"exit 0"}
 if [[ "$CMD" == "-d" ]];
 then
 #	service sshd stop
