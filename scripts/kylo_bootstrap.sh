@@ -1,7 +1,9 @@
 #!/bin/bash
 
 /etc/hadoop_bootstrap.sh
-/etc/nifi_boostrap.sh
+
+echo "Starting NiFi"
+/opt/nifi/current/bin/nifi.sh start
 
 #setup Kylo database, service mariadb
 echo "Setup Kylo database in MySQL"
@@ -12,16 +14,19 @@ echo "Sleeping 30s (waiting for NiFi)..."
 sleep 30s
 
 echo "Starting kylo apps"
-/opt/kylo/kylo-ui/bin/run-kylo-ui.sh
 #/opt/kylo/start-kylo-apps.sh
+/opt/kylo/kylo-ui/bin/run-kylo-ui.sh start
+/opt/kylo/kylo-services/bin/run-kylo-services.sh start
+/opt/kylo/kylo-services/bin/run-kylo-spark-shell.sh start
 
 cp -r /var/sampledata/* /var/dropzone/
 
 
-CMD=${1:-"exit 0"}
+#CMD=${1:-"exit 0"}
+CMD="-d"
 if [[ "$CMD" == "-d" ]];
 then
-	service sshd stop
+#	service sshd stop
 	/usr/sbin/sshd -p22 -D -d
 else
 	/bin/bash -c "$*"

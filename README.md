@@ -9,9 +9,10 @@ As a goal, Kylo image docker build from sources should be matter of seconds rath
 Each layer should contain only the necessary minimums of settings needed to run with Kylo.
 Everything Kylo-related and not needed in deployment-time should be in Kylo layer.
 
-https://docs.google.com/document/d/1nWLF5cOm2nEC-y-LmOK4AcdtNRfTNRcgB9CcGxPbU74/edit
+https://docs.google.com/presentation/d/1s-uNcb0QwEIYUqmN_-c-QqVRTYM5_AxluYp9Nxy_iQk/edit#slide=id.g226f3b27bd_0_29
 
-So far, the NiFi layer is ready:
+## CURRENT STATUS
+The containers are ready but the Kylo image doesn't boot properly.
 
 ```
 docker swarm init
@@ -19,7 +20,13 @@ docker stack deploy -c docker-compose.yml kylo_stack
 ```
 
 ## TODO
+have working stack (localhost:8400 -> Kylo login -> ingest sampledata)
+```
 docker-compose.yml:
 change/parametrize MYSQL_ROOT_PASSWORD,
 set resource limits (memory, cpu),
-mariadb data directory volume,
+externalize mariadb data directory volume
+```
+```
+externalizing volumes with the data
+using kylo-ui and kylo-services wars and jars instead of kylo.rpm or kylo.tar
