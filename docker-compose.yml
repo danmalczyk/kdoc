@@ -64,23 +64,24 @@ services:
       - "8161:8161"
     networks:
       - kylonet    
-#  kylo:
-#    image: dmalczyk/kylo:latest
-#    deploy:
-#      replicas: 1
-#      resources:
-#        limits:
-#          cpus: "0.5"
-#          memory: 4G
-#      restart_policy:
-#        condition: on-failure
-#        delay: 60s
-#        max_attempts: 3
-#        window: 180s        
-#    ports:
-#      - "8079:8079"
-#    networks:
-#      - kylonet      
+  kylo:
+    image: dmalczyk/kylo:latest
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 4G
+      restart_policy:
+        condition: on-failure
+        delay: 60s
+        max_attempts: 3
+        window: 180s        
+    ports:
+      - "8079:8079"
+      - "8400:8400"
+    networks:
+      - kylonet      
 #  visualizer:
 #    image: dockersamples/visualizer:stable
 #    ports:

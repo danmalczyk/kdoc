@@ -10,16 +10,10 @@ MAINTAINER Daniel Malczyk <dmalczyk@gmail.com>
 RUN /bin/bash -c 'useradd -r -m -s /bin/bash kylo;'
 
 #download and install Kylo rpm
-RUN /bin/bash -c 'echo \"Downloading the RPM\";\
-wget http://bit.ly/2r4P47A -O kylo-0.8.1-1.rpm;\
-rpm -ivh kylo-0.8.1-1.rpm;\
-rm kylo-0.8.1-1.rpm'
-
-#setup Kylo database, service mariadb
-RUN echo "Setup Kylo database in MySQL" && \
-    /opt/kylo/setup/sql/mysql/setup-mysql.sh mariadb root hadoop
+RUN curl -o /tmp/kylo.rpm -L http://bit.ly/2r4P47A && rpm -ivh /tmp/kylo.rpm && rm /tmp/kylo.rpm
 
 #install Kylo components to NiFi (and possibly start NiFi service)
+ENV KYLO_INSTALL_NIFI_SUPPRESS_START "YES"
 RUN echo "Install Kylo components to NiFi" && \
     /opt/kylo/setup/nifi/install-kylo-components.sh
 
@@ -39,6 +33,9 @@ COPY conf/application.properties /opt/kylo/kylo-services/conf/
 RUN jwtkey=$(grep 'security.jwt.key' /opt/kylo/kylo-ui/conf/application.properties | awk -F  "=" '/1/ {print $2}') && sed -i "s/security\.jwt\.key=<insert-256-bit-secret-key-here>/security\.jwt\.key=${jwtkey}/" /opt/kylo/kylo-services/conf/application.properties
 RUN echo "Kylo Installation complete"
 
+# Make mysql driver available to kylo-spark-shell
+RUN cp /usr/local/apache-hive-2.1.1-bin/lib/mysql-connector-java-5.1.41.jar /opt/nifi/mysql/
+
 # add spark and hadoop path to PATH env variable for kylo user
 RUN echo "export PATH=$PATH:/usr/java/default/bin:/usr/local/spark/bin:/usr/local/hadoop/bin" >> /etc/profile
 
@@ -51,7 +48,7 @@ RUN usermod -a -G supergroup nifi
 RUN mkdir -p /var/share
 VOLUME /var/share
 
-COPY scripts/bootstrap.sh /etc/kylo_bootstrap.sh
+COPY scripts/kylo_bootstrap.sh /etc/kylo_bootstrap.sh
 RUN chown root.root /etc/kylo_bootstrap.sh
 RUN chmod 700 /etc/kylo_bootstrap.sh
 

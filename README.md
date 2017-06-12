@@ -14,6 +14,7 @@ https://docs.google.com/document/d/1nWLF5cOm2nEC-y-LmOK4AcdtNRfTNRcgB9CcGxPbU74/
 So far, the NiFi layer is ready:
 
 ```
+docker swarm init
 docker stack deploy -c docker-compose.yml kylo_stack
 ```
 

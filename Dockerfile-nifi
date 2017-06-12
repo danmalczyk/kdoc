@@ -4,12 +4,21 @@
 #basic image with CentOS and latest JDK
 FROM airhacks/java
 
-#FROM sequenceiq/spark:1.6.0
-
 MAINTAINER Daniel Malczyk <dmalczyk@gmail.com>
 
-#install java
-#RUN /bin/bash -c 'yum -y install wget java-1.8.0-openjdk-headless.x86_64; exit 0'
+# install dev tools
+RUN yum clean all; \
+    rpm --rebuilddb; \
+    yum install -y curl which tar sudo openssh-server openssh-clients rsync; \
+    yum clean all
+
+# passwordless ssh
+RUN ssh-keygen -q -N "" -t dsa -f /etc/ssh/ssh_host_dsa_key
+RUN ssh-keygen -q -N "" -t rsa -f /etc/ssh/ssh_host_rsa_key
+RUN ssh-keygen -q -N "" -t rsa -f /root/.ssh/id_rsa
+RUN ssh-keygen -q -N "" -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key
+RUN ssh-keygen -q -N "" -t ed25519 -f /etc/ssh/ssh_host_ed25519_key
+RUN cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 
 # create nifi user and group
 RUN /bin/bash -c 'useradd -r -m -s /bin/bash nifi'
@@ -23,7 +32,6 @@ COPY scripts/nifi_bootstrap.sh /etc/nifi_bootstrap.sh
 RUN chown root.root /etc/nifi_bootstrap.sh && \
     chmod u+x /etc/nifi_bootstrap.sh
 
-RUN  echo "hello"
 ENTRYPOINT ["/etc/nifi_bootstrap.sh"]
 
 # expose NiFi UI

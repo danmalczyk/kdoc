@@ -23,6 +23,9 @@ ssh-keyscan localhost >> ~/.ssh/known_hosts
 $HADOOP_PREFIX/sbin/start-dfs.sh
 $HADOOP_PREFIX/sbin/start-yarn.sh
 
+#database has to be ready at this point in mariadb service
+cd /usr/local/hive/scripts/metastore/upgrade/mysql/ && mysql -hmariadb -uroot -phadoop -e "CREATE DATABASE IF NOT EXISTS hive;" && mysql -hmariadb -uroot -phadoop hive < ./hive-schema-2.1.0.mysql.sql
+
 /etc/init.d/hive-server2 start
 
 # For hive and spark sql integration, we can only do it at runtime since hostname is required in core-site.xml
@@ -32,6 +35,7 @@ echo "spark.executor.extraClassPath $SPARK_HOME/lib/mysql-connector-java-5.1.41.
 echo "spark.driver.extraClassPath $SPARK_HOME/lib/mysql-connector-java-5.1.41.jar" >> $SPARK_HOME/conf/spark-defaults.conf
 
 CMD=${1:-"exit 0"}
+#CMD="-d"
 if [[ "$CMD" == "-d" ]];
 then
         /usr/sbin/sshd -p22 -D -d
