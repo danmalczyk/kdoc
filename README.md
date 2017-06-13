@@ -26,7 +26,7 @@ docker stack deploy -c docker-compose.yml kylo_stack
 ```
 
 ## TODO
-
+find all the places where localhost is hard-typed for db, activemq and es
 ```
 docker-compose.yml:
 change/parametrize MYSQL_ROOT_PASSWORD,
