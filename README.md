@@ -19,24 +19,53 @@ Change "vm.max_map_count" kernel variable in the VM running docker daemon: https
 Increase memory dedicated for Docker (Preferences -> Advanced, currently 10G)
 For debugging purposes, Kylo rpm should be now in ./kylo_rpm/kylo.rpm (not included, download from http://bit.ly/2r4P47A)
 
+### Start swarm
 ```
 docker swarm init
-docker stack deploy -c docker-compose.yml kylo_stack
-#wait up to 15min and open localhost:8400
+```
+
+### Download kylo.rpm
+```
+mkdir kylo_rpm
+curl -o ./kylo_rpm/kylo.rpm -L http://bit.ly/2r4P47A
+```
+
+## Build/Start/Stop
+
+### Fetch images
+Fetch elasticsearch, activemq, mysql from dockerhub
+
+```
+make fetch
+```
+
+### Build images
+```
+make build
+```
+
+### Start stack
+Don't forget to fetch and build the images before starting.
+
+```
+make start
+
+# wait up to 15min and open http://localhost:8400
+```
+
+### Stop stack
+```
+make stop
 ```
 
 ## TODO
-
-```
-docker-compose.yml:
-change/parametrize MYSQL_ROOT_PASSWORD,
-set resource limits (memory, cpu),
-externalize mariadb data directory volume
-```
-```
-externalize kylo and nifi volumes with user data (maybe elasticsearch too?)
-use kylo-ui and kylo-services wars and jars from maven build instead of kylo.rpm or kylo.tar
-make Kylo jars thinner, i.e. change jars and wars dependencies so that external framework libs (Spring) etc are in the image before Kylo jars
-separate Hadoop services to another container
-tune Elasticsearch
-```
+- docker-compose.yml:
+    - change/parametrize MYSQL_ROOT_PASSWORD
+    - set resource limits (memory, cpu)
+- externalize mariadb data directory volume
+- externalize kylo and nifi volumes with user data (maybe elasticsearch too?)
+- developer/production kylo images
+- developer kylo image with kylo-ui and kylo-services wars and jars from maven build instead of kylo.rpm or kylo.tar
+- make Kylo jars thinner, i.e. change jars and wars dependencies so that external framework libs (Spring) etc are in the image before Kylo jars
+- separate Hadoop services to another container
+- tune Elasticsearch
