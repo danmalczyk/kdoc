@@ -12,7 +12,7 @@ Everything Kylo-related and not needed in deployment-time should be in Kylo laye
 https://docs.google.com/presentation/d/1s-uNcb0QwEIYUqmN_-c-QqVRTYM5_AxluYp9Nxy_iQk/edit#slide=id.g226f3b27bd_0_29
 
 ## CURRENT STATUS
-The containers are ready but the Kylo image doesn't boot properly.
+The stack is working and tested by ingesting userdata2.csv to parquet
 
 ## HOW TO RUN
 Change "vm.max_map_count" kernel variable in the VM running docker daemon: https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-cli-run-prod-mode.
@@ -26,7 +26,7 @@ docker stack deploy -c docker-compose.yml kylo_stack
 ```
 
 ## TODO
-find all the places where localhost is hard-typed for db, activemq and es
+
 ```
 docker-compose.yml:
 change/parametrize MYSQL_ROOT_PASSWORD,
