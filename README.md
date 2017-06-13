@@ -26,7 +26,7 @@ docker stack deploy -c docker-compose.yml kylo_stack
 ```
 
 ## TODO
-separate HDFS container
+
 ```
 docker-compose.yml:
 change/parametrize MYSQL_ROOT_PASSWORD,
