@@ -55,21 +55,54 @@ docker stack deploy -c docker-compose.yml kylo_stack
 
 7. Open Kylo from browser at localhost:8400 ("docker ps" must show 4 running containers, Kylo takes up to 15mins to start)
 
-When building Kylo image from Dockerfile-kylo, copy or link Kylo RPM to ./kylo_rpm/kylo.rpm
-(not included, download from http://bit.ly/2r4P47A or mvn build from source )
+## DEVELOPER HOW-TO RUN BY CLAUDIU
+### Start swarm - one time init
+```
+docker swarm init
+```
+
+### Download kylo.rpm (or build from source and link Kylo RPM to ./kylo_rpm/kylo.rpm)
+```
+mkdir kylo_rpm
+curl -o ./kylo_rpm/kylo.rpm -L http://bit.ly/2r4P47A
+```
+
+## Build/Start/Stop
+
+### Fetch images
+Fetch elasticsearch, activemq, mysql from dockerhub
+
+```
+make fetch
+```
+
+### Build images
+```
+make build
+```
+
+### Start stack
+Don't forget to fetch and build the images before starting.
+
+```
+make start
+
+# wait up to 15min and open http://localhost:8400
+```
+### Stop stack
+```
+make stop
+# alternatively docker stack rm kylo_stack
+```
 
 ## TODO
-
-```
-docker-compose.yml:
-change/parametrize MYSQL_ROOT_PASSWORD,
-externalize mariadb data directory volume
-```
-```
-externalize kylo and nifi volumes with user data (maybe elasticsearch too?)
-use kylo-ui and kylo-services wars and jars from maven build instead of kylo.rpm or kylo.tar
-modify maven builds to be able to rebuild and redeploy just changed modules
-make Kylo jars thinner, i.e. change jars and wars dependencies so that external framework libs (Spring) etc are in the image before Kylo jars
-separate Hadoop services to another container
-tune Elasticsearch
-```
+- docker-compose.yml:
+    - change/parametrize MYSQL_ROOT_PASSWORD
+- externalize mariadb data directory volume
+- externalize kylo and nifi volumes with user data (maybe elasticsearch too?)
+- developer/production kylo images
+- developer kylo image with kylo-ui and kylo-services wars and jars from maven build instead of kylo.rpm or kylo.tar
+- modify maven builds to be able to rebuild and redeploy just changed modules
+- make Kylo jars thinner, i.e. change jars and wars dependencies so that external framework libs (Spring) etc are in the image before Kylo jars
+- separate Hadoop services to another container
+- tune Elasticsearch

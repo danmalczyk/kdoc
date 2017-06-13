@@ -11,7 +11,7 @@ RUN /bin/bash -c 'useradd -r -m -s /bin/bash kylo;'
 
 #download and install Kylo rpm
 #RUN curl -o /tmp/kylo.rpm -L http://bit.ly/2r4P47A && rpm -ivh /tmp/kylo.rpm && rm /tmp/kylo.rpm
-ADD kylo_rpm/kylo.rpm /tmp/kylo.rpm
+COPY kylo_rpm/kylo.rpm /tmp/kylo.rpm
 RUN rpm -ivh /tmp/kylo.rpm && rm /tmp/kylo.rpm
 
 #install Kylo components to NiFi (and possibly start NiFi service)
