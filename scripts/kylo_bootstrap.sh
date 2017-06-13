@@ -2,15 +2,20 @@
 
 /etc/hadoop_bootstrap.sh
 
-#echo "Sleeping 120s (waiting for the stack to stabilize)..."
-#sleep 120
-
 echo "Starting NiFi"
 /opt/nifi/current/bin/nifi.sh start
 
 #setup Kylo database, service mariadb
 echo "Setup Kylo database in MySQL"
-/opt/kylo/setup/sql/mysql/setup-mysql.sh mariadb root hadoop
+#database has to be ready at this point in mariadb service, making a few attempts with pause
+attempts=5
+while [ $attempts -gt 0 ]
+do 
+    /opt/kylo/setup/sql/mysql/setup-mysql.sh mariadb root hadoop
+    [[ $? -eq 0 ]] && break
+    ((attempts--))
+    sleep 10
+done
 
 # sleep 240 sec to make sure nifi is ready
 echo "Sleeping 30s (waiting for NiFi)..."

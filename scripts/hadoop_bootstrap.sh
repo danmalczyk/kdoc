@@ -23,8 +23,16 @@ ssh-keyscan localhost >> ~/.ssh/known_hosts
 $HADOOP_PREFIX/sbin/start-dfs.sh
 $HADOOP_PREFIX/sbin/start-yarn.sh
 
-#database has to be ready at this point in mariadb service
-cd /usr/local/hive/scripts/metastore/upgrade/mysql/ && mysql -hmariadb -uroot -phadoop -e "CREATE DATABASE IF NOT EXISTS hive;" && mysql -hmariadb -uroot -phadoop hive < ./hive-schema-2.1.0.mysql.sql
+#database has to be ready at this point in mariadb service, making a few attempts with pause
+attempts=5
+while [ $attempts -gt 0 ]
+do 
+    cd /usr/local/hive/scripts/metastore/upgrade/mysql/ && mysql -hmariadb -uroot -phadoop -e "CREATE DATABASE IF NOT EXISTS hive;" && mysql -hmariadb -uroot -phadoop hive < ./hive-schema-2.1.0.mysql.sql
+    [[ $? -eq 0 ]] && break
+    ((attempts--))
+    sleep 10
+done
+
 
 /etc/init.d/hive-server2 start
 
