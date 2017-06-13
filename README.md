@@ -67,7 +67,7 @@ mkdir kylo_rpm
 curl -o ./kylo_rpm/kylo.rpm -L http://bit.ly/2r4P47A
 ```
 
-## Build/Start/Stop
+## Build/Start/Stop everything
 
 ### Fetch images
 Fetch elasticsearch, activemq, mysql from dockerhub
