@@ -1,6 +1,6 @@
 ## Kylo Docker Layers and Services
 
-The work is based on Keven Wang's Kylo in Docker: https://github.com/keven4ever/kylo_docker/tree/multi_container
+The work is based on Keven Wang's Kylo in Docker: https://github.com/keven4ever/kylo_docker
 
 This project aims to dockerize Kylo deployment from source so that the adjacent
 services are in separate containers and Kylo container is built from NiFi container.
@@ -22,10 +22,11 @@ For debugging purposes, Kylo rpm should be now in ./kylo_rpm/kylo.rpm (not inclu
 ```
 docker swarm init
 docker stack deploy -c docker-compose.yml kylo_stack
+#wait around 5min and open localhost:8400
 ```
 
 ## TODO
-have working stack (localhost:8400 -> Kylo login -> ingest sampledata)
+separate HDFS container
 ```
 docker-compose.yml:
 change/parametrize MYSQL_ROOT_PASSWORD,
