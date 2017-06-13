@@ -15,16 +15,53 @@ https://docs.google.com/presentation/d/1s-uNcb0QwEIYUqmN_-c-QqVRTYM5_AxluYp9Nxy_
 The stack is working and tested by ingesting userdata2.csv to parquet
 
 ## HOW TO RUN
-Change "vm.max_map_count" kernel variable in the VM running docker daemon: https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-cli-run-prod-mode.
-Increase memory dedicated for Docker (Preferences -> Advanced, currently 10G)
-For debugging purposes, Kylo rpm should be now in ./kylo_rpm/kylo.rpm (not included, download from http://bit.ly/2r4P47A)
+1. Change "vm.max_map_count" kernel varialble in the VM running docker daemon: https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-cli-run-prod-mode.
+So if you are using macbook with Docker for Mac installed (note, docker for mac https://docs.docker.com/docker-for-mac/install/ is different from previous generation of docker on mac which is Docker machine https://docs.docker.com/machine/), then you can follow steps below
+```
+# Launch a termal in your macbook and start a screen session to connect to the VM which is the host of docker containers
+screen ~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty
+# Click "enter" once to get shell promot, then type in shell command "login"
+/ # login
+# input login credential, root/<empty password>
+moby login: root
+# Input empty pwd by click enter
+# Set the parameter
+moby:~#sysctl -w vm.max_map_count=262144
+# Then you can check if this parameter is set:
+moby:~# sysctl vm.max_map_count
+# You should see sth like below
+vm.max_map_count = 262144
+# At the end exit the screen session by type in Ctrl-A + D to exist the screen session, Hold Ctrl and A together then click D.
+```
+2. Tune Docker instance
+```
+Increase memory dedicated for Docker (Preferences -> Advanced, currently 9G)
+```
+3. Login to Docker Hub
+```
+docker login -u dockerhub_username -p dockerhub_passwd
+```
+4. Download docker-compose.yml from danmalczyk/kdoc GitHub repo 
+ 
+5. Init docker swarm and deploy Kylo stack
+```
+docker swarm init #first-time init, no need to reissue
+docker stack deploy -c docker-compose.yml kylo_stack
+```
 
-### Start swarm
+6. First time docker pulls all the images (6 GiB) and starts the stack,
+    it takes quite a long time ("docker events" will show the progress)
+    further boots are just service starts)
+
+7. Open Kylo from browser at localhost:8400 ("docker ps" must show 4 running containers, Kylo takes up to 15mins to start)
+
+## DEVELOPER HOW-TO RUN BY CLAUDIU
+### Start swarm - one time init
 ```
 docker swarm init
 ```
 
-### Download kylo.rpm
+### Download kylo.rpm (or build from source and link Kylo RPM to ./kylo_rpm/kylo.rpm)
 ```
 mkdir kylo_rpm
 curl -o ./kylo_rpm/kylo.rpm -L http://bit.ly/2r4P47A
@@ -52,20 +89,20 @@ make start
 
 # wait up to 15min and open http://localhost:8400
 ```
-
 ### Stop stack
 ```
 make stop
+# alternatively docker stack rm kylo_stack
 ```
 
 ## TODO
 - docker-compose.yml:
     - change/parametrize MYSQL_ROOT_PASSWORD
-    - set resource limits (memory, cpu)
 - externalize mariadb data directory volume
 - externalize kylo and nifi volumes with user data (maybe elasticsearch too?)
 - developer/production kylo images
 - developer kylo image with kylo-ui and kylo-services wars and jars from maven build instead of kylo.rpm or kylo.tar
+- modify maven builds to be able to rebuild and redeploy just changed modules
 - make Kylo jars thinner, i.e. change jars and wars dependencies so that external framework libs (Spring) etc are in the image before Kylo jars
 - separate Hadoop services to another container
 - tune Elasticsearch
