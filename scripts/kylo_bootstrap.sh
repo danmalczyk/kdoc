@@ -15,7 +15,6 @@ echo "Setup Kylo database in MySQL"
 # sleep 240 sec to make sure nifi is ready
 echo "Sleeping 30s (waiting for NiFi)..."
 sleep 30
-
 echo "Starting kylo apps"
 #/opt/kylo/start-kylo-apps.sh
 /opt/kylo/kylo-ui/bin/run-kylo-ui.sh start

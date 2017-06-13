@@ -22,7 +22,7 @@ For debugging purposes, Kylo rpm should be now in ./kylo_rpm/kylo.rpm (not inclu
 ```
 docker swarm init
 docker stack deploy -c docker-compose.yml kylo_stack
-#wait around 5min and open localhost:8400
+#wait up to 15min and open localhost:8400
 ```
 
 ## TODO
