@@ -3,7 +3,7 @@ The kylo docker image is based on the kylo image, and it replaces the kylo-*.jar
 
 ## Configuration
 
-`scripts/config.sh` contains the user configuration. Follow the comments
+[`scripts/config.sh`](scripts/config.sh) contains the user configuration. Follow the comments
 
 ## Build image
 
