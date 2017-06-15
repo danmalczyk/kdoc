@@ -1,19 +1,21 @@
+#!/bin/bash
 
-
-# specify which remote git repository with kylo you want to clone
+# Specify which remote git repository with kylo you want to clone
+# Default will not clone, but look existing folder containing KYLO_DIR (see below)
 # eg: CLONE_URL=https://github.com/<whoami>/kylo.git
-CLONE_URL=
+CLONE_URL=https://github.com/Teradata/kylo.git
 
-# specify which branch you want to checkout
+# Specify which branch you want to checkout, if cloning from a repository
+# Default is the default branch from the repository
 # eg: BRANCH=feature/new-awesome-feature
-BRANCH=
+BRANCH=release/0.8.1
 
-# specify which modules to build/ignore
-# modules are separated by ","
-# if overridden, you might want to add ",!install" to skip rpms, tarballs, etc...
-# eg: MODULES=( ui services nifi)
-MODULES=( ui )
+# Specify which maven modules to copy Everything else is ignored
+# only supported: ui, services, integrations
+# eg: MODULES=( ui services )
+MODULES=( ui services integrations )
 
-# specify which local kylo directory you want to use (instead of a repository)
+# Specify which kylo directory you want to use (instead of a repository/ override default repository path)
+# Path must be absolute
 # eg: KYLO_DIR=/<whoami>/repositories/kylo
-KYLO_DIR=/Users/cs186081/repositories/kylo
+KYLO_DIR=~/repositories/kylo

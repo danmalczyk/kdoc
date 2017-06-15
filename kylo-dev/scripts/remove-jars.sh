@@ -3,17 +3,17 @@
 source config.sh
 
 for MODULE in "${MODULES[@]}" ; do
-    echo "Cleaning jars in ${MODULE}"
+    echo "Cleaning jars in module ${MODULE}"
     if [ "${MODULE}" = "services" ] ; then
-        rm -rf ${KYLO_HOME}/kylo-service/lib/kylo-service*.jar
+        rm -rf ${KYLO_HOME}/kylo-services/lib/kylo-*.jar
 
     elif [ "${MODULE}" = "ui" ] ; then
-        rm -rf ${KYLO_HOME}/kylo-ui/lib/kylo-ui-app-*.jar
+        rm -rf ${KYLO_HOME}/kylo-ui/lib/kylo-*.jar
 
     elif [ "${MODULE}" = "integrations" ] ; then
-        rm -rf ${KYLO_HOME}/lib/kylo-nifi-hadoop-processors-*.jar
+        rm -rf ${KYLO_HOME}/lib/kylo-*.jar
     else
-        echo "Module not mapped to be copied to Docker img"
+        echo "Module ${MODULE} not mapped to be copied to Docker img"
     fi
 
 done

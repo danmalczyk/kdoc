@@ -1,7 +1,7 @@
 include settings.mk
 
 .PHONY: all
-all: build
+all: clean build
 
 .PHONY: build
 build:
@@ -12,4 +12,4 @@ build:
 
 .PHONY: clean
 clean:
-	rm -rf kylo
+	rm -rf kylo-jars
