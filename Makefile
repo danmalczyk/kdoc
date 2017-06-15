@@ -4,6 +4,9 @@ ELASTICSEARCH_VERSION := 5.4.1
 ACTIVEMQ_VERSION := 5.13.3
 MARIADB_VERSION := 10.0
 
+.PHONY: all
+all: fetch build start
+
 .PHONY: fetch
 fetch:
 	@echo "Fetching images ..."
@@ -24,6 +27,12 @@ build:
 start:
 	@echo "Starting stack kylo_stack ..."
 	@docker stack deploy -c docker-compose.yml kylo_stack
+	@echo "Started stack"
+
+.PHONY: start-dev
+start-dev:
+	@echo "Starting stack kylo_stack ..."
+	@docker stack deploy -c docker-compose-dev.yml kylo_stack
 	@echo "Started stack"
 
 .PHONY: stop
