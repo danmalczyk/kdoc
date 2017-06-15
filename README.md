@@ -106,7 +106,7 @@ make start
 Runs a stack with the latest kylo src. Check [kylo dev readme](kylo-dev/README.md)
 
 ```
-make start
+make start-dev
 
 # wait up to 15min and open http://localhost:8400
 ```
