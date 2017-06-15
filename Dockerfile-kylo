@@ -17,7 +17,7 @@ RUN rpm -ivh /tmp/kylo.rpm && rm /tmp/kylo.rpm
 #install Kylo components to NiFi (and possibly start NiFi service)
 ENV KYLO_INSTALL_NIFI_SUPPRESS_START "YES"
 RUN echo "Install Kylo components to NiFi" && \
-    /opt/kylo/setup/nifi/install-kylo-components.sh
+    /opt/kylo/setup/nifi/install-kylo-components.sh /opt/nifi /opt/kylo nifi nifi /opt/kylo/setup -o
 
 RUN echo "Creating the dropzone folder" && mkdir -p /var/dropzone
 RUN chown nifi:nifi /var/dropzone
