@@ -26,8 +26,7 @@ build:
 .PHONY: start
 start:
 	@echo "Starting stack kylo_stack ..."
-	#@docker stack deploy -c docker-compose.yml kylo_stack
-	@docker stack deploy -c docker-compose-dev.yml kylo_stack
+	@docker stack deploy -c docker-compose.yml kylo_stack
 	@echo "Started stack"
 
 .PHONY: start-dev
