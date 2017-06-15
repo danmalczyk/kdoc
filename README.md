@@ -84,6 +84,15 @@ make fetch
 make build
 ```
 
+### Build kylo dev image
+Builds a kylo image with the latest kylo src. Check [kylo dev readme](kylo-dev/README.md)
+
+```
+cd kylo-dev
+make
+cd -
+```
+
 ### Start stack
 Don't forget to fetch and build the images before starting.
 
@@ -92,6 +101,16 @@ make start
 
 # wait up to 15min and open http://localhost:8400
 ```
+
+### Start dev stack
+Runs a stack with the latest kylo src. Check [kylo dev readme](kylo-dev/README.md)
+
+```
+make start
+
+# wait up to 15min and open http://localhost:8400
+```
+
 ### Stop stack
 ```
 make stop
@@ -99,13 +118,12 @@ make stop
 ```
 
 ## TODO
+- docker images should be ran with unpriviledged user (kylo/nifi)
+- add feed templates to the kylo prd image
 - docker-compose.yml:
     - change/parametrize MYSQL_ROOT_PASSWORD
 - externalize mariadb data directory volume
 - externalize kylo and nifi volumes with user data (maybe elasticsearch too?)
-- developer/production kylo images
-- developer kylo image with kylo-ui and kylo-services wars and jars from maven build instead of kylo.rpm or kylo.tar
-- modify maven builds to be able to rebuild and redeploy just changed modules
-- make Kylo jars thinner, i.e. change jars and wars dependencies so that external framework libs (Spring) etc are in the image before Kylo jars
+- make Kylo jars thinner, i.e. change jars and wars dependencies so that external framework libs (Spring) etc are in the image before Kylo jars (is this still useful since the kylo dev image only takes the kylo jars ?)
 - separate Hadoop services to another container
 - tune Elasticsearch
