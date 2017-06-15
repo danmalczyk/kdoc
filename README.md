@@ -9,12 +9,11 @@ As a goal, Kylo image docker build from sources should be matter of seconds rath
 Each layer should contain only the necessary minimums of settings needed to run with Kylo.
 Everything Kylo-related and not needed in deployment-time should be in Kylo layer.
 
-https://docs.google.com/presentation/d/1s-uNcb0QwEIYUqmN_-c-QqVRTYM5_AxluYp9Nxy_iQk/edit#slide=id.g226f3b27bd_0_29
-
+https://docs.google.com/presentation/d/1juClfDMePmRcdonlK6k4fmc5QAw3D9bvWAmDyemqe7c/edit#slide=id.g22f3240589_1_10
 ## CURRENT STATUS
 The stack is working and tested by ingesting userdata2.csv to parquet
 
-## HOW TO RUN
+## HOW TO RUN - tasks 1 - 5 are just first-time settings
 1. Change "vm.max_map_count" kernel varialble in the VM running docker daemon: https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-cli-run-prod-mode.
 So if you are using macbook with Docker for Mac installed (note, docker for mac https://docs.docker.com/docker-for-mac/install/ is different from previous generation of docker on mac which is Docker machine https://docs.docker.com/machine/), then you can follow steps below
 ```
@@ -43,17 +42,21 @@ docker login -u dockerhub_username -p dockerhub_passwd
 ```
 4. Download docker-compose.yml from danmalczyk/kdoc GitHub repo 
  
-5. Init docker swarm and deploy Kylo stack
+5. Init docker swarm
 ```
 docker swarm init #first-time init, no need to reissue
+```
+
+6. Deploy Kylo stack
+```
 docker stack deploy -c docker-compose.yml kylo_stack
 ```
 
-6. First time docker pulls all the images (6 GiB) and starts the stack,
+7. First time docker pulls all the images (6 GiB) and starts the stack,
     it takes quite a long time ("docker events" will show the progress)
     further boots are just service starts)
 
-7. Open Kylo from browser at localhost:8400 ("docker ps" must show 4 running containers, Kylo takes up to 15mins to start)
+8. Open Kylo from browser at localhost:8400 ("docker ps" must show 4 running containers, Kylo takes up to 15mins to start)
 
 ## DEVELOPER HOW-TO RUN BY CLAUDIU
 ### Start swarm - one time init
