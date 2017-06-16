@@ -24,7 +24,7 @@ RUN cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 RUN /bin/bash -c 'useradd -r -m -s /bin/bash nifi'
 
 # download and install NiFi with Kylo-provided script
-COPY install/setup/nifi/install-nifi.sh .
+COPY conf/install-nifi.sh .
 RUN chmod u+x ./install-nifi.sh && \
     ./install-nifi.sh /opt/nifi nifi users
 
