@@ -65,7 +65,7 @@ services:
     networks:
       - kylonet    
   kylo:
-    image: dmalczyk/kylo:fromsource
+    image: dmalczyk/kylo:latest
     command: ["-d"]
     deploy:
       replicas: 1
