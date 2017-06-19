@@ -1,13 +1,6 @@
 ## Kylo Docker Layers and Services
 ## KDOC v2 splits installation scripts into separate images and requires linking Dockerfiles with Kylo repo
 
-```
-cd [kylo_root_dir]
-ln -s [kdoc_root_dir]/kylo/Dockerfile
-ln -s [kdoc_root_dir]/kylo/dockerstack_conf/
-```
-(This is a temporary setting. In the future, Dockerfile and config should be integral part of Kylo)
-
 The work is based on Keven Wang's Kylo in Docker: https://github.com/keven4ever/kylo_docker
 
 This project aims to dockerize Kylo deployment from source so that the adjacent
