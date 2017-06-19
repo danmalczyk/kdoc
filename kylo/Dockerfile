@@ -11,7 +11,7 @@ RUN /bin/bash -c 'useradd -r -m -s /bin/bash kylo;'
 
 #download and install Kylo rpm
 #RUN curl -o /tmp/kylo.rpm -L http://bit.ly/2r4P47A && rpm -ivh /tmp/kylo.rpm && rm /tmp/kylo.rpm
-COPY kylo_rpm/kylo.rpm /tmp/kylo.rpm
+COPY install/install-rpm/target/kylo-install-rpm-*-SNAPSHOT.jar /tmp/kylo.rpm
 RUN rpm -ivh /tmp/kylo.rpm && rm /tmp/kylo.rpm
 
 #install Kylo components to NiFi (and possibly start NiFi service)
@@ -30,8 +30,8 @@ RUN chown -R kylo:kylo /var/sampledata
 #setup kylo
 ENV KYLO_HOME=/opt/kylo
 ENV PATH $PATH:$KYLO_HOME
-COPY conf/application.properties /opt/kylo/kylo-services/conf/
-COPY conf/config.properties /opt/nifi/ext-config/
+COPY dockerstack_conf/application.properties /opt/kylo/kylo-services/conf/
+COPY dockerstack_conf/config.properties /opt/nifi/ext-config/
 
 # Align the same security.jwt.key as kylo-ui which is generated in kylo post-installation
 RUN jwtkey=$(grep 'security.jwt.key' /opt/kylo/kylo-ui/conf/application.properties | awk -F  "=" '/1/ {print $2}') && sed -i "s/security\.jwt\.key=<insert-256-bit-secret-key-here>/security\.jwt\.key=${jwtkey}/" /opt/kylo/kylo-services/conf/application.properties
