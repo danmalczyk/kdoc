@@ -1,8 +1,8 @@
 # Daniel Malczyk
 # ThinkBig Analytics, a Teradata Company
 
-#starting from NiFi image
-FROM dmalczyk/kylo-hadoop:latest
+#starting from NiFi+hadoop image
+FROM kstack-hadoop
 
 MAINTAINER Daniel Malczyk <dmalczyk@gmail.com>
 

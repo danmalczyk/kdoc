@@ -10,9 +10,17 @@ echo "Setup Kylo database in MySQL"
 #database has to be ready at this point in mariadb service, making a few attempts with pause
 attempts=5
 while [ $attempts -gt 0 ]
-do 
-    /opt/kylo/setup/sql/mysql/setup-mysql.sh mariadb root hadoop
-    [[ $? -eq 0 ]] && break
+do
+    echo "trying to execute db scripts ${attempts} more time(s)."
+    echo "testing for kylo database existence"
+    if [[ "kylo" == "`mysql -hmariadb -uroot -phadoop -NqfsBe \"SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='kylo'\" 2>&1`" ]];
+    then
+      echo "database already exists. skipping db bootstrap"
+      break; #database exists
+    else
+      /opt/kylo/setup/sql/mysql/setup-mysql.sh mariadb root hadoop
+    fi    
+    [[ $? -eq 0 ]] && echo "db scripts execution succeeded" && break
     ((attempts--))
     sleep 10
 done

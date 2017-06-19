@@ -12,7 +12,9 @@ services:
         condition: on-failure
         delay: 60s
         max_attempts: 3
-        window: 180s     
+        window: 180s
+    volumes:
+      - dbinit:/docker-entrypoint-initdb.d
     environment:
         MYSQL_ROOT_PASSWORD: hadoop
     ports:
@@ -65,7 +67,7 @@ services:
     networks:
       - kylonet    
   kylo:
-    image: dmalczyk/kylo:fromsource
+    image: kstack-kylo
     command: ["-d"]
     deploy:
       replicas: 1
@@ -97,5 +99,7 @@ services:
 volumes:
   esdata:
     driver: local
+  dbinit:
+    external: true
 networks:
   kylonet:

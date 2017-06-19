@@ -27,8 +27,16 @@ $HADOOP_PREFIX/sbin/start-yarn.sh
 attempts=5
 while [ $attempts -gt 0 ]
 do 
-    cd /usr/local/hive/scripts/metastore/upgrade/mysql/ && mysql -hmariadb -uroot -phadoop -e "CREATE DATABASE IF NOT EXISTS hive;" && mysql -hmariadb -uroot -phadoop hive < ./hive-schema-2.1.0.mysql.sql
-    [[ $? -eq 0 ]] && break
+    echo "trying to execute db scripts ${attempts} more time(s)."
+    echo "testing for hive database existence"
+    if [[ "hive" == "`mysql -hmariadb -uroot -phadoop -NqfsBe \"SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='hive'\" 2>&1`" ]];
+    then
+      echo "database already exists. skipping db bootstrap"
+      break; #database exists
+    else
+        cd /usr/local/hive/scripts/metastore/upgrade/mysql/ && mysql -hmariadb -uroot -phadoop -e "CREATE DATABASE IF NOT EXISTS hive;" && mysql -hmariadb -uroot -phadoop hive < ./hive-schema-2.1.0.mysql.sql
+    fi
+    [[ $? -eq 0 ]] && echo "db script execution succeeded." && break
     ((attempts--))
     sleep 10
 done

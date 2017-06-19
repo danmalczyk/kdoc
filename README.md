@@ -1,5 +1,5 @@
 ## Kylo Docker Layers and Services
-## KDOC v2 splits installation scripts into separate images and requires linking Dockerfiles with Kylo repo
+## KDOC v2 tries to further split Kylo image into separate services
 
 The work is based on Keven Wang's Kylo in Docker: https://github.com/keven4ever/kylo_docker
 
