@@ -21,6 +21,24 @@ services:
       - "3306:3306"
     networks:
       - kylonet
+  hadoophost:
+    image: kstack-spark
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "3G"
+      restart_policy:
+        condition: none
+        delay: 60s
+        max_attempts: 3
+        window: 180s
+    ports:
+      - "10000:10000"
+      - "9000:9000"
+    networks:
+      - kylonet
   elasticsearch:  
     image: docker.elastic.co/elasticsearch/elasticsearch:5.4.1    
     deploy:
