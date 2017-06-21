@@ -1,5 +1,7 @@
 ## Kylo Docker Layers and Services
 
+This is an experimental Kylo deployment, not officially supported.
+
 The work is based on Keven Wang's Kylo in Docker: https://github.com/keven4ever/kylo_docker
 
 This project aims to dockerize Kylo deployment from source so that the adjacent
