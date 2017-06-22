@@ -23,6 +23,7 @@ services:
       - kylonet
   hadoophost:
     image: kstack-spark
+    command: ["-d"]
     deploy:
       replicas: 1
       resources:
@@ -85,7 +86,7 @@ services:
     networks:
       - kylonet    
   kylo:
-    image: kstack-kylo
+    image: kstack-kylo2
     command: ["-d"]
     deploy:
       replicas: 1

@@ -82,8 +82,10 @@ COPY conf/config.properties /opt/nifi/ext-config/
 RUN jwtkey=$(grep 'security.jwt.key' /opt/kylo/kylo-ui/conf/application.properties | awk -F  "=" '/1/ {print $2}') && sed -i "s/security\.jwt\.key=<insert-256-bit-secret-key-here>/security\.jwt\.key=${jwtkey}/" /opt/kylo/kylo-services/conf/application.properties
 RUN echo "Kylo Installation complete"
 
+# Download mysql jdbc driver and prepare hive metastore.
+RUN curl -s -o /usr/local/apache-hive-2.1.1-bin/lib/mysql-connector-java-5.1.41.jar http://central.maven.org/maven2/mysql/mysql-connector-java/5.1.41/mysql-connector-java-5.1.41.jar
 # Make mysql driver available to kylo-spark-shell
-RUN cp /usr/local/apache-hive-2.1.1-bin/lib/mysql-connector-java-5.1.41.jar /opt/nifi/mysql/
+RUN cp /usr/local/hive/lib/mysql-connector-java-5.1.41.jar /opt/nifi/mysql/
 
 # add spark and hadoop path to PATH env variable for kylo user
 RUN echo "export PATH=$PATH:/usr/local/spark/bin:/usr/local/hadoop/bin" >> /etc/profile
@@ -96,6 +98,12 @@ RUN usermod -a -G supergroup nifi
 # shared volume
 RUN mkdir -p /var/share
 VOLUME /var/share
+
+# install dev tools
+RUN yum clean all; \
+    rpm --rebuilddb; \
+    yum install -y mysql; \
+    yum clean all
 
 COPY scripts/kylo_bootstrap.sh /etc/kylo_bootstrap.sh
 RUN chown root.root /etc/kylo_bootstrap.sh

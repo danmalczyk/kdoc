@@ -19,10 +19,10 @@ do
       break; #database exists
     else
       /opt/kylo/setup/sql/mysql/setup-mysql.sh mariadb root hadoop
+      [[ $? -eq 0 ]] && echo "db scripts execution succeeded" && break
+      ((attempts--))
+      sleep 10
     fi    
-    [[ $? -eq 0 ]] && echo "db scripts execution succeeded" && break
-    ((attempts--))
-    sleep 10
 done
 
 # sleep 240 sec to make sure nifi is ready

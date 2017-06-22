@@ -35,10 +35,10 @@ do
       break; #database exists
     else
         cd /usr/local/hive/scripts/metastore/upgrade/mysql/ && mysql -hmariadb -uroot -phadoop -e "CREATE DATABASE IF NOT EXISTS hive;" && mysql -hmariadb -uroot -phadoop hive < ./hive-schema-2.1.0.mysql.sql
+        [[ $? -eq 0 ]] && echo "db script execution succeeded." && break
+        ((attempts--))
+        sleep 10
     fi
-    [[ $? -eq 0 ]] && echo "db script execution succeeded." && break
-    ((attempts--))
-    sleep 10
 done
 
 
