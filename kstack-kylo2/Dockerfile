@@ -77,6 +77,7 @@ ENV KYLO_HOME=/opt/kylo
 ENV PATH $PATH:$KYLO_HOME
 COPY conf/application.properties /opt/kylo/kylo-services/conf/
 COPY conf/config.properties /opt/nifi/ext-config/
+COPY conf/spark.properties /opt/kylo/kylo-services/conf
 
 # Align the same security.jwt.key as kylo-ui which is generated in kylo post-installation
 RUN jwtkey=$(grep 'security.jwt.key' /opt/kylo/kylo-ui/conf/application.properties | awk -F  "=" '/1/ {print $2}') && sed -i "s/security\.jwt\.key=<insert-256-bit-secret-key-here>/security\.jwt\.key=${jwtkey}/" /opt/kylo/kylo-services/conf/application.properties
@@ -112,3 +113,4 @@ RUN chmod 700 /etc/kylo_bootstrap.sh
 ENTRYPOINT ["/etc/kylo_bootstrap.sh"]
 
 EXPOSE 8400
+EXPOSE 8888

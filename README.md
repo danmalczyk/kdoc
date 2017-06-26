@@ -2,6 +2,7 @@
 ## KDOC v2 tries to further split Kylo image into separate services
 
 This is an experimental Kylo deployment, not officially supported.
+This branch is under construction. Stack doesn't work so far, there is "Connection refused" in  kylo-services, even though dladmin is logged in.
 
 The work is based on Keven Wang's Kylo in Docker: https://github.com/keven4ever/kylo_docker
 

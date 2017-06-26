@@ -24,21 +24,21 @@ $HADOOP_PREFIX/sbin/start-dfs.sh
 $HADOOP_PREFIX/sbin/start-yarn.sh
 
 #database has to be ready at this point in mariadb service, making a few attempts with pause
-attempts=5
+attempts=20
 while [ $attempts -gt 0 ]
-do 
+do
     echo "trying to execute db scripts ${attempts} more time(s)."
     echo "testing for hive database existence"
-    if [[ "hive" == "`mysql -hmariadb -uroot -phadoop -NqfsBe \"SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='hive'\" 2>&1`" ]];
+    dbexists="`mysql -hmariadb -uroot -phadoop -NqsBe \"SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='hive'\"`"
+    [[ $? -ne 0 ]] && echo "db not ready" && ((attempts--)) && sleep 10 && continue
+    if [[ "hive" == "${dbexists}" ]];
     then
       echo "database already exists. skipping db bootstrap"
       break; #database exists
     else
-        cd /usr/local/hive/scripts/metastore/upgrade/mysql/ && mysql -hmariadb -uroot -phadoop -e "CREATE DATABASE IF NOT EXISTS hive;" && mysql -hmariadb -uroot -phadoop hive < ./hive-schema-2.1.0.mysql.sql
-        [[ $? -eq 0 ]] && echo "db script execution succeeded." && break
-        ((attempts--))
-        sleep 10
-    fi
+      cd /usr/local/hive/scripts/metastore/upgrade/mysql/ && mysql -hmariadb -uroot -phadoop -e "CREATE DATABASE IF NOT EXISTS hive;" && mysql -hmariadb -uroot -phadoop hive < ./hive-schema-2.1.0.mysql.sql
+      break;
+    fi    
 done
 
 
