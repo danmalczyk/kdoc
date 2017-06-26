@@ -1,9 +1,11 @@
 ## Kylo Docker Layers and Services
 ## KDOC v2 tries to further split Kylo image into separate services
 
+## CURRENT STATUS
 This is an experimental Kylo deployment, not officially supported.
 This branch is under construction. Stack doesn't work so far, there is "Connection refused" in  kylo-services, even though dladmin is logged in.
 
+## OVERVIEW
 The work is based on Keven Wang's Kylo in Docker: https://github.com/keven4ever/kylo_docker
 
 This project aims to dockerize Kylo deployment from source so that the adjacent
@@ -14,8 +16,6 @@ Each layer should contain only the necessary minimums of settings needed to run 
 Everything Kylo-related and not needed in deployment-time should be in Kylo layer.
 
 https://docs.google.com/presentation/d/1juClfDMePmRcdonlK6k4fmc5QAw3D9bvWAmDyemqe7c/edit#slide=id.g22f3240589_1_10
-## CURRENT STATUS
-The stack is working and tested by ingesting userdata2.csv to parquet
 
 ## HOW TO RUN - tasks 1 - 5 are just first-time settings
 1. Change "vm.max_map_count" kernel varialble in the VM running docker daemon: https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-cli-run-prod-mode.
