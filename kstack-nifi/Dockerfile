@@ -28,6 +28,8 @@ COPY conf/install-nifi.sh .
 RUN chmod u+x ./install-nifi.sh && \
     ./install-nifi.sh /opt/nifi nifi users
 
+VOLUME /opt/nifi/data
+
 COPY scripts/nifi_bootstrap.sh /etc/nifi_bootstrap.sh
 RUN chown root.root /etc/nifi_bootstrap.sh && \
     chmod u+x /etc/nifi_bootstrap.sh

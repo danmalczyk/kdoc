@@ -119,6 +119,15 @@ RUN cp /usr/local/hive/lib/mysql-connector-java-5.1.41.jar /usr/local/spark/lib
 # ----- Spark-Hive integration finished ---------
 
 
+# create nifi user and group
+RUN /bin/bash -c 'useradd -r -m -s /bin/bash nifi'
+# create kylo user and group
+RUN /bin/bash -c 'useradd -r -m -s /bin/bash kylo'
+# Add kylo and nifi user to supergroup otherwise kylo-spark-shell service which runs as kylo user will not be able to create database in hive.
+RUN groupadd supergroup
+RUN usermod -a -G supergroup kylo
+RUN usermod -a -G supergroup nifi
+
 COPY scripts/hadoop_bootstrap.sh /etc/hadoop_bootstrap.sh
 RUN chown root.root /etc/hadoop_bootstrap.sh
 RUN chmod 700 /etc/hadoop_bootstrap.sh
@@ -138,4 +147,4 @@ EXPOSE 49707 2122
 #Hive
 EXPOSE 10000
 #Spark
-EXPOSE 8450 8451
+EXPOSE 8450 8451 4040

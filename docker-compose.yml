@@ -14,7 +14,7 @@ services:
         max_attempts: 3
         window: 180s
     volumes:
-      - dbinit:/docker-entrypoint-initdb.d
+      - ./kylo-stack-mountpoints/dbinit:/docker-entrypoint-initdb.d
     environment:
         MYSQL_ROOT_PASSWORD: hadoop
     ports:
@@ -40,6 +40,8 @@ services:
       - "9000:9000"
       - "8450:8450"
       - "8451:8451"
+      - "4040:4040"
+      - "8088:8088"
     networks:
       - kylonet
   elasticsearch:  
@@ -63,7 +65,7 @@ services:
 #        soft: -1
 #        hard: -1
     volumes:
-      - esdata:/usr/share/elasticsearch/data
+      - ./kylo-stack-mountpoints/esdata:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -105,6 +107,9 @@ services:
       - "8079:8079"
       - "8400:8400"
       - "8888:8888"
+    volumes:
+      - ./kylo-stack-mountpoints/nifidata:/opt/nifi/data
+      - ./kylo-stack-mountpoints/kyloshare:/var/share
     networks:
       - kylonet      
 #  visualizer:
@@ -118,10 +123,14 @@ services:
 #        constraints: [node.role == manager]
 #    networks:
 #      - kylonet
-volumes:
-  esdata:
-    driver: local
-  dbinit:
-    external: true
+#volumes:
+#  esdata:
+#    driver: local
+#  dbinit:
+#    external: true
+#  kyloshare:
+#    external: true
+#  nifidata:
+#    driver: local
 networks:
   kylonet:

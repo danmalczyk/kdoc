@@ -2,13 +2,22 @@
 # ThinkBig Analytics, a Teradata Company
 
 #starting from NiFi+hadoop image
-FROM dmalczyk/kylo-nifi
+FROM kstack-nifi
 
 MAINTAINER Daniel Malczyk <dmalczyk@gmail.com>
+
+# install dev tools
+RUN yum clean all; \
+    rpm --rebuilddb; \
+    yum install -y mysql; \
+    yum clean all
 
 #TODO install hadoop, spark and Hive clients
 #------------
 #Hadoop client config
+RUN curl -s http://www.eu.apache.org/dist/hadoop/common/hadoop-2.7.1/hadoop-2.7.1.tar.gz | tar -xz -C /usr/local/
+RUN cd /usr/local && ln -s ./hadoop-2.7.1 hadoop
+
 ENV HADOOP_HOME /usr/local/hadoop
 ENV HADOOP_INSTALL $HADOOP_HOME
 ENV HADOOP_PREFIX $HADOOP_HOME
@@ -56,7 +65,8 @@ RUN /bin/bash -c 'useradd -r -m -s /bin/bash kylo;'
 
 #download and install Kylo rpm
 #RUN curl -o /tmp/kylo.rpm -L http://bit.ly/2r4P47A && rpm -ivh /tmp/kylo.rpm && rm /tmp/kylo.rpm
-COPY kylo_rpm/kylo0.8.1.rpm /tmp/kylo.rpm
+#COPY kylo_rpm/kylo0.8.1.rpm /tmp/kylo.rpm
+COPY kylo_rpm/kylo.rpm /tmp/kylo.rpm
 RUN rpm -ivh /tmp/kylo.rpm && rm /tmp/kylo.rpm
 
 #install Kylo components to NiFi (and possibly start NiFi service)
@@ -87,6 +97,7 @@ RUN echo "Kylo Installation complete"
 RUN curl -s -o /usr/local/apache-hive-2.1.1-bin/lib/mysql-connector-java-5.1.41.jar http://central.maven.org/maven2/mysql/mysql-connector-java/5.1.41/mysql-connector-java-5.1.41.jar
 # Make mysql driver available to kylo-spark-shell
 RUN cp /usr/local/hive/lib/mysql-connector-java-5.1.41.jar /opt/nifi/mysql/
+RUN cp /opt/kylo/kylo-services/lib/mariadb-java-client-1.5.7.jar /opt/nifi/mysql/
 
 # add spark and hadoop path to PATH env variable for kylo user
 RUN echo "export PATH=$PATH:/usr/local/spark/bin:/usr/local/hadoop/bin" >> /etc/profile
@@ -99,12 +110,6 @@ RUN usermod -a -G supergroup nifi
 # shared volume
 RUN mkdir -p /var/share
 VOLUME /var/share
-
-# install dev tools
-RUN yum clean all; \
-    rpm --rebuilddb; \
-    yum install -y mysql; \
-    yum clean all
 
 COPY scripts/kylo_bootstrap.sh /etc/kylo_bootstrap.sh
 RUN chown root.root /etc/kylo_bootstrap.sh

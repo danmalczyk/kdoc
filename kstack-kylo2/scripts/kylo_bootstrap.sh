@@ -31,7 +31,7 @@ sleep 30
 echo "Starting kylo apps"
 #/opt/kylo/start-kylo-apps.sh
 /opt/kylo/kylo-ui/bin/run-kylo-ui.sh start
-/opt/kylo/kylo-services/bin/run-kylo-services.sh start
+/opt/kylo/kylo-services/bin/run-kylo-services-with-debug.sh start
 /opt/kylo/kylo-services/bin/run-kylo-spark-shell.sh start
 
 cp -r /var/sampledata/* /var/dropzone/

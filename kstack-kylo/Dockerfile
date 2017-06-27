@@ -39,6 +39,7 @@ RUN echo "Kylo Installation complete"
 
 # Make mysql driver available to kylo-spark-shell
 RUN cp /usr/local/apache-hive-2.1.1-bin/lib/mysql-connector-java-5.1.41.jar /opt/nifi/mysql/
+RUN cp /opt/kylo/kylo-services/lib/mariadb-java-client-1.5.7.jar /opt/nifi/mysql/
 
 # add spark and hadoop path to PATH env variable for kylo user
 RUN echo "export PATH=$PATH:/usr/local/spark/bin:/usr/local/hadoop/bin" >> /etc/profile
