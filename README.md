@@ -1,9 +1,9 @@
 ## Kylo Docker Layers and Services
-## KDOC v2 tries to further split Kylo image into separate services
 
 ## CURRENT STATUS
 This is an experimental Kylo deployment, not officially supported.
-This branch is working now (as a proof of concept) and tested on userdata2.csv stanard ingest.
+Tested on ingesting userdata2.csv via standard ingest.
+Hadoop namenode, hive server and spark master are in separate container now.
 
 ## OVERVIEW
 The work is based on Keven Wang's Kylo in Docker: https://github.com/keven4ever/kylo_docker
