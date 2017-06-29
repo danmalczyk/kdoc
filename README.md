@@ -64,7 +64,7 @@ docker stack deploy -c docker-compose.yml kylo_stack
     it takes quite a long time ("docker events" will show the progress)
     further boots are just service starts)
 
-8. Open Kylo from browser at localhost:8400 ("docker ps" must show 4 running containers, Kylo takes up to 15mins to start)
+8. Open Kylo from browser at localhost:8400 ("docker ps" must show 5 running containers, Kylo takes up to 15mins to start)
 
 ## DEVELOPER HOW-TO
 ### Start swarm - one time init
@@ -110,10 +110,11 @@ make stop
 ## TODO
 - docker images should be ran with unpriviledged user (kylo/nifi)
 - add feed templates to the kylo prd image
+- run spark in yarn-cluster mode
 - docker-compose.yml:
     - change/parametrize MYSQL_ROOT_PASSWORD
-- externalize mariadb data directory volume
-- externalize kylo and nifi volumes with user data (maybe elasticsearch too?)
+- externalize mariadb data directory volume? externalize kylo and nifi volumes with user data? (maybe elasticsearch too?)
 - make Kylo jars thinner, i.e. change jars and wars dependencies so that external framework libs (Spring) etc are in the image before Kylo jars (is this still useful since the kylo dev image only takes the kylo jars ?)
 - separate Hadoop services to another container
 - tune Elasticsearch
+- tune hadoop cluster
