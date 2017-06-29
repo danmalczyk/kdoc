@@ -1,18 +1,26 @@
 # Daniel Malczyk
 # ThinkBig Analytics, a Teradata Company
 
-#starting from NiFi image
-FROM dmalczyk/kylo-nifi:latest
+#image for a separate Hadoop/Spark container for Kylo
+FROM airhacks/java
 
 MAINTAINER Daniel Malczyk <dmalczyk@gmail.com>
 
 # install dev tools
 RUN yum clean all; \
     rpm --rebuilddb; \
-    yum install -y mysql; \
+    yum install -y curl which tar sudo openssh-server openssh-clients rsync mysql; \
     yum clean all
 # update libselinux. see https://github.com/sequenceiq/hadoop-docker/issues/14
 RUN yum update -y libselinux
+
+# passwordless ssh
+RUN ssh-keygen -q -N "" -t dsa -f /etc/ssh/ssh_host_dsa_key
+RUN ssh-keygen -q -N "" -t rsa -f /etc/ssh/ssh_host_rsa_key
+RUN ssh-keygen -q -N "" -t rsa -f /root/.ssh/id_rsa
+RUN ssh-keygen -q -N "" -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key
+RUN ssh-keygen -q -N "" -t ed25519 -f /etc/ssh/ssh_host_ed25519_key
+RUN cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 
 # download native support
 RUN mkdir -p /tmp/native
@@ -111,6 +119,15 @@ RUN cp /usr/local/hive/lib/mysql-connector-java-5.1.41.jar /usr/local/spark/lib
 # ----- Spark-Hive integration finished ---------
 
 
+# create nifi user and group
+RUN /bin/bash -c 'useradd -r -m -s /bin/bash nifi'
+# create kylo user and group
+RUN /bin/bash -c 'useradd -r -m -s /bin/bash kylo'
+# Add kylo and nifi user to supergroup otherwise kylo-spark-shell service which runs as kylo user will not be able to create database in hive.
+RUN groupadd supergroup
+RUN usermod -a -G supergroup kylo
+RUN usermod -a -G supergroup nifi
+
 COPY scripts/hadoop_bootstrap.sh /etc/hadoop_bootstrap.sh
 RUN chown root.root /etc/hadoop_bootstrap.sh
 RUN chmod 700 /etc/hadoop_bootstrap.sh
@@ -119,4 +136,15 @@ ENV BOOTSTRAP /etc/hadoop_bootstrap.sh
 
 ENTRYPOINT ["/etc/hadoop_bootstrap.sh"]
 
+# Hdfs ports
+EXPOSE 50010 50020 50070 50075 50090 8020 9000
+# Mapred ports
+EXPOSE 10020 19888
+#Yarn ports
+EXPOSE 8030 8031 8032 8033 8040 8042 8088
+#Other ports
+EXPOSE 49707 2122
+#Hive
 EXPOSE 10000
+#Spark
+EXPOSE 8450 8451 4040

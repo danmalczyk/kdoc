@@ -1,7 +1,7 @@
 version: "3"
 services:
   kylo:
-    image: dmalczyk/kstack-kylo:latest
+    image: dmalczyk/kstack-kylo:2.0
     command: ["-d"]
     deploy:
       replicas: 1
@@ -25,7 +25,7 @@ services:
     networks:
       - kylonet          
   hadoophost:
-    image: dmalczyk/kstack-hadoophost:latest
+    image: dmalczyk/kstack-hadoophost:2.0
     command: ["-d"]
     hostname: hadoophost
     deploy:

@@ -1,5 +1,53 @@
 version: "3"
 services:
+  kylo:
+    image: dmalczyk/kstack-kylo-dev:latest
+    command: ["-d"]
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "1"
+          memory: "6.5G"
+      restart_policy:
+        condition: none
+        delay: 60s
+        max_attempts: 3
+        window: 180s        
+    ports:
+      - "8079:8079"
+      - "8400:8400"
+      - "8888:8888"
+      - "8420:8420"
+    volumes:
+#      - ./kylo-stack-mountpoints/nifidata:/opt/nifi/data
+      - ./kylo-stack-mountpoints/kyloshare:/var/share
+    networks:
+      - kylonet          
+  hadoophost:
+    image: dmalczyk/kstack-hadoophost:latest
+    command: ["-d"]
+    hostname: hadoophost
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "3G"
+      restart_policy:
+        condition: none
+        delay: 60s
+        max_attempts: 3
+        window: 180s
+    ports:
+      - "10000:10000"
+      - "9000:9000"
+      - "8450:8450"
+      - "8451:8451"
+      - "4040:4040"
+      - "8088:8088"
+    networks:
+      - kylonet
   mariadb:
     image: mariadb:10.0
     deploy:
@@ -12,15 +60,17 @@ services:
         condition: on-failure
         delay: 60s
         max_attempts: 3
-        window: 180s     
+        window: 180s
+    volumes:
+      - dbinit:/docker-entrypoint-initdb.d
     environment:
         MYSQL_ROOT_PASSWORD: hadoop
     ports:
       - "3306:3306"
     networks:
       - kylonet
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch-local:5.4.1    
+  elasticsearch:  
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.4.1    
     deploy:
       replicas: 1
       resources:
@@ -64,25 +114,6 @@ services:
       - "8161:8161"
     networks:
       - kylonet    
-  kylo:
-    image: dmalczyk/kylo-dev:latest
-    command: ["-d"]
-    deploy:
-      replicas: 1
-      resources:
-        limits:
-          cpus: "0.9"
-          memory: "6.5G"
-      restart_policy:
-        condition: none
-        delay: 60s
-        max_attempts: 3
-        window: 180s        
-    ports:
-      - "8079:8079"
-      - "8400:8400"
-    networks:
-      - kylonet      
 #  visualizer:
 #    image: dockersamples/visualizer:stable
 #    ports:
@@ -97,5 +128,11 @@ services:
 volumes:
   esdata:
     driver: local
+  dbinit:
+    external: true
+#  kyloshare:
+#    external: true
+#  nifidata:
+#    driver: local
 networks:
   kylonet:

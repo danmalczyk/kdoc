@@ -18,9 +18,9 @@ fetch:
 .PHONY: build
 build:
 	@echo "Building images ..."
-	@docker build -f Dockerfile-nifi -t dmalczyk/kylo-nifi .
-	@docker build -f Dockerfile-hadoop -t dmalczyk/kylo-hadoop .
-	@docker build -f Dockerfile-kylo -t dmalczyk/kylo .
+	@docker build -t dmalczyk/kstack-nifi ./kstack-nifi
+	@docker build -t dmalczyk/kstack-hadoophost ./kstack-hadoophost
+	@docker build -t dmalczyk/kstack-kylo ./kstack-kylo
 	@echo "Build finished"
 
 .PHONY: start

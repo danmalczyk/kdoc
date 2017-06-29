@@ -1,6 +1,6 @@
 # ThinkBig Analytics, a Teradata Company
 
-FROM dmalczyk/kylo:latest
+FROM dmalczyk/kstack-kylo:latest
 
 ARG MODULES
 
