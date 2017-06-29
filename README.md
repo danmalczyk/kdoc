@@ -49,7 +49,7 @@ docker login -u dockerhub_username -p dockerhub_passwd
 4. * download docker-compose.yml from danmalczyk/kdoc GitHub repo (kdocv2 branch)
    * in the directory where docker-compose_2_0.yml is, create shared mountpoint for Kylo container:
 ```
-wget https://github.com/danmalczyk/kdoc/blob/kdocv2/docker-compose.yml
+wget https://github.com/danmalczyk/kdoc/blob/master/docker-compose_2_0.yml
 mkdir -p ./kylo-stack-mountpoints/kyloshare
 ```
  
