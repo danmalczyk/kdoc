@@ -5,7 +5,7 @@
 This is an experimental Kylo deployment, not officially supported.
 Tested on ingesting userdata2.csv via standard ingest.
 Hadoop namenode, hive server and spark master are in separate container now.
-Working on separating NiFi container.
+Now I'm working on separating NiFi container.
 
 ## OVERVIEW
 The work is based on Keven Wang's Kylo in Docker: https://github.com/keven4ever/kylo_docker
@@ -46,9 +46,10 @@ Increase memory dedicated for Docker (Preferences -> Advanced, currently 9G)
 ```
 docker login -u dockerhub_username -p dockerhub_passwd
 ```
-4. a) download docker-compose_2_0.yml from danmalczyk/kdoc GitHub repo (kdocv2 branch)
-   b) in the directory where docker-compose_2_0.yml is, create shared mountpoint for Kylo container:
+4. * download docker-compose.yml from danmalczyk/kdoc GitHub repo (kdocv2 branch)
+   * in the directory where docker-compose_2_0.yml is, create shared mountpoint for Kylo container:
 ```
+wget https://github.com/danmalczyk/kdoc/blob/kdocv2/docker-compose.yml
 mkdir -p ./kylo-stack-mountpoints/kyloshare
 ```
  
@@ -67,6 +68,8 @@ docker stack deploy -c docker-compose.yml kylo_stack
     further boots are just service starts)
 
 8. Open Kylo from browser at localhost:8400 ("docker ps" must show 5 running containers, Kylo takes up to 15mins to start)
+
+---
 
 ## DEVELOPER HOW-TO
 ### Start swarm - one time init
