@@ -46,7 +46,7 @@ Increase memory dedicated for Docker (Preferences -> Advanced, currently 9G)
 ```
 docker login -u dockerhub_username -p dockerhub_passwd
 ```
-4. * download docker-compose.yml from danmalczyk/kdoc GitHub repo (kdocv2 branch)
+4. * download docker-compose_2_0.yml from danmalczyk/kdoc GitHub repo
    * in the directory where docker-compose_2_0.yml is, create shared mountpoint for Kylo container:
 ```
 wget https://github.com/danmalczyk/kdoc/blob/master/docker-compose_2_0.yml
