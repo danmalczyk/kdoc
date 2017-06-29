@@ -18,21 +18,21 @@ fetch:
 .PHONY: build
 build:
 	@echo "Building images ..."
-	@docker build -t dmalczyk/kstack-nifi:2.0 ./kstack-nifi
-	@docker build -t dmalczyk/kstack-hadoophost:2.0 ./kstack-hadoophost
-	@docker build -t dmalczyk/kstack-kylo:2.0 ./kstack-kylo
+	@docker build -t dmalczyk/kstack-nifi ./kstack-nifi
+	@docker build -t dmalczyk/kstack-hadoophost ./kstack-hadoophost
+	@docker build -t dmalczyk/kstack-kylo ./kstack-kylo
 	@echo "Build finished"
 
 .PHONY: start
 start:
 	@echo "Starting stack kylo_stack ..."
-	@docker stack deploy -c docker-compose_2_0.yml kylo_stack
+	@docker stack deploy -c docker-compose.yml kylo_stack
 	@echo "Started stack"
 
 .PHONY: start-dev
 start-dev:
 	@echo "Starting stack kylo_stack ..."
-	@docker stack deploy -c docker-compose_2_0-dev.yml kylo_stack
+	@docker stack deploy -c docker-compose-dev.yml kylo_stack
 	@echo "Started stack"
 
 .PHONY: stop

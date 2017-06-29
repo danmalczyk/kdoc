@@ -2,7 +2,7 @@
 # ThinkBig Analytics, a Teradata Company
 
 #starting from NiFi image
-FROM dmalczyk/kstack-nifi:2.0
+FROM dmalczyk/kstack-nifi:latest
 
 MAINTAINER Daniel Malczyk <dmalczyk@gmail.com>
 
