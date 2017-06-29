@@ -1,0 +1,138 @@
+version: "3"
+services:
+  mariadb:
+    image: mariadb:10.0
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: "0.5G"
+      restart_policy:
+        condition: on-failure
+        delay: 60s
+        max_attempts: 3
+        window: 180s
+    volumes:
+      - dbinit:/docker-entrypoint-initdb.d
+    environment:
+        MYSQL_ROOT_PASSWORD: hadoop
+    ports:
+      - "3306:3306"
+    networks:
+      - kylonet
+  hadoophost:
+    image: dmalczyk/kstack-hadoophost:2.0
+    command: ["-d"]
+    hostname: hadoophost
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "3G"
+      restart_policy:
+        condition: none
+        delay: 60s
+        max_attempts: 3
+        window: 180s
+    ports:
+      - "10000:10000"
+      - "9000:9000"
+      - "8450:8450"
+      - "8451:8451"
+      - "4040:4040"
+      - "8088:8088"
+    networks:
+      - kylonet
+  elasticsearch:  
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.4.1    
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.6"
+          memory: "1.5G"
+      restart_policy:
+        condition: on-failure
+        delay: 60s
+        max_attempts: 3
+        window: 180s     
+    environment:
+#      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+#    ulimits:
+#      memlock:
+#        soft: -1
+#        hard: -1
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - kylonet
+  activemq:
+    image: rmohr/activemq:5.13.3
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.3"
+          memory: "0.5G"
+      restart_policy:
+        condition: on-failure
+        delay: 60s
+        max_attempts: 3
+        window: 180s     
+    ports:
+      - "61616:61616"
+      - "8161:8161"
+    networks:
+      - kylonet    
+  kylo:
+    image: dmalczyk/kstack-kylo-dev:2.0
+    command: ["-d"]
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "1"
+          memory: "6.5G"
+      restart_policy:
+        condition: none
+        delay: 60s
+        max_attempts: 3
+        window: 180s        
+    ports:
+      - "8079:8079"
+      - "8400:8400"
+      - "8888:8888"
+      - "8420:8420"
+    volumes:
+#      - ./kylo-stack-mountpoints/nifidata:/opt/nifi/data
+      - ./kylo-stack-mountpoints/kyloshare:/var/share
+    networks:
+      - kylonet      
+#  visualizer:
+#    image: dockersamples/visualizer:stable
+#    ports:
+#      - "8080:8080"
+#    volumes:
+#      - "/var/run/docker.sock:/var/run/docker.sock"
+#    deploy:
+#      placement:
+#        constraints: [node.role == manager]
+#    networks:
+#      - kylonet
+#volumes:
+#  esdata:
+#    driver: local
+#  dbinit:
+#    external: true
+#  kyloshare:
+#    external: true
+#  nifidata:
+#    driver: local
+networks:
+  kylonet:

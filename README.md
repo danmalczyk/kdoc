@@ -3,7 +3,7 @@
 
 ## CURRENT STATUS
 This is an experimental Kylo deployment, not officially supported.
-This branch is under construction. Stack doesn't work so far, there is "Connection refused" in  kylo-services, even though dladmin is logged in.
+This branch is working now (as a proof of concept) and tested on userdata2.csv stanard ingest.
 
 ## OVERVIEW
 The work is based on Keven Wang's Kylo in Docker: https://github.com/keven4ever/kylo_docker
@@ -44,7 +44,11 @@ Increase memory dedicated for Docker (Preferences -> Advanced, currently 9G)
 ```
 docker login -u dockerhub_username -p dockerhub_passwd
 ```
-4. Download docker-compose.yml from danmalczyk/kdoc GitHub repo 
+4. a) download docker-compose_2_0.yml from danmalczyk/kdoc GitHub repo (kdocv2 branch)
+   b) in the directory where docker-compose_2_0.yml is, create shared mountpoint for Kylo container:
+```
+mkdir -p ./kylo-stack-mountpoints/kyloshare
+```
  
 5. Init docker swarm
 ```
@@ -62,31 +66,13 @@ docker stack deploy -c docker-compose.yml kylo_stack
 
 8. Open Kylo from browser at localhost:8400 ("docker ps" must show 4 running containers, Kylo takes up to 15mins to start)
 
-## DEVELOPER HOW-TO RUN BY CLAUDIU
+## DEVELOPER HOW-TO
 ### Start swarm - one time init
 ```
 docker swarm init
 ```
 
-### Download kylo.rpm (or build from source and link Kylo RPM to ./kylo_rpm/kylo.rpm)
-```
-mkdir kylo_rpm
-curl -o ./kylo_rpm/kylo.rpm -L http://bit.ly/2r4P47A
-```
-
-## Build/Start/Stop everything
-
-### Fetch images
-Fetch elasticsearch, activemq, mysql from dockerhub
-
-```
-make fetch
-```
-
-### Build images
-```
-make build
-```
+### Build from source and copy Kylo RPM to ./kstack-kylo2/kylo_rpm/kylo.rpm), tested with v. 0.8.2
 
 ### Build kylo dev image
 Builds a kylo image with the latest kylo src. Check [kylo dev readme](kylo-dev/README.md)
