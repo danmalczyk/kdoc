@@ -112,6 +112,8 @@ make stop
 # alternatively docker stack rm kylo_stack
 ```
 
+---
+
 ## TODO
 - docker images should be ran with unpriviledged user (kylo/nifi)
 - add feed templates to the kylo prd image
@@ -120,6 +122,5 @@ make stop
     - change/parametrize MYSQL_ROOT_PASSWORD
 - externalize mariadb data directory volume? externalize kylo and nifi volumes with user data? (maybe elasticsearch too?)
 - make Kylo jars thinner, i.e. change jars and wars dependencies so that external framework libs (Spring) etc are in the image before Kylo jars (is this still useful since the kylo dev image only takes the kylo jars ?)
-- separate Hadoop services to another container
 - tune Elasticsearch
 - tune hadoop cluster
