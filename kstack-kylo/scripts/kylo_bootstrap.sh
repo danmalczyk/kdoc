@@ -22,15 +22,11 @@ do
     fi    
 done
 
-# For hive and spark sql integration, we can only do it at runtime since hostname is required in core-site.xml
-cp $HADOOP_PREFIX/etc/hadoop/core-site.xml $SPARK_HOME/conf
-echo spark.yarn.jar hdfs://hadoophost/spark/spark-assembly-1.6.0-hadoop2.6.0.jar > $SPARK_HOME/conf/spark-defaults.conf
-# Somehow spark-defaults.conf always overwriten by some process, so we need to append mysql driver when run the container.
-echo "spark.executor.extraClassPath $SPARK_HOME/lib/mysql-connector-java-5.1.41.jar" >> $SPARK_HOME/conf/spark-defaults.conf
-echo "spark.driver.extraClassPath $SPARK_HOME/lib/mysql-connector-java-5.1.41.jar" >> $SPARK_HOME/conf/spark-defaults.conf
+## Somehow spark-defaults.conf always overwriten by some process, so we need to append mysql driver when run the container.
+## carefully to not have these settings twice in the conf file - spark-submit then fails
+#echo "spark.executor.extraClassPath $SPARK_HOME/lib/mysql-connector-java-5.1.41.jar" >> $SPARK_HOME/conf/spark-defaults.conf
+#echo "spark.driver.extraClassPath $SPARK_HOME/lib/mysql-connector-java-5.1.41.jar" >> $SPARK_HOME/conf/spark-defaults.conf
 
-echo "Starting NiFi"
-/opt/nifi/current/bin/nifi.sh start
 
 # sleep 240 sec to make sure nifi is ready
 echo "Sleeping 30s (waiting for NiFi)..."
@@ -41,14 +37,15 @@ echo "Starting kylo apps"
 /opt/kylo/kylo-services/bin/run-kylo-services-with-debug.sh start
 /opt/kylo/kylo-services/bin/run-kylo-spark-shell.sh start
 
-cp -r /var/sampledata/* /var/dropzone/
+#cp -r /var/sampledata/* /var/dropzone/
 
 
 CMD=${1:-"exit 0"}
 if [[ "$CMD" == "-d" ]];
 then
 #	service sshd stop
-	/usr/sbin/sshd -p22 -D -d
+#	/usr/sbin/sshd -p22 -D -d
+        tail -f /dev/null
 else
 	/bin/bash -c "$*"
 fi

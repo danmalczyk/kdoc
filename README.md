@@ -5,7 +5,7 @@
 This is an experimental Kylo deployment, not officially supported.
 Tested on ingesting userdata2.csv via standard ingest.
 Hadoop namenode, hive server and spark master are in separate container now.
-Now I'm working on separating NiFi container.
+Nifi and Kylo are in separate containers now.
 
 ## OVERVIEW
 The work is based on Keven Wang's Kylo in Docker: https://github.com/keven4ever/kylo_docker
@@ -72,6 +72,15 @@ docker stack deploy -c docker-compose.yml kylo_stack
 ---
 
 ## DEVELOPER HOW-TO
+
+### REMEMBER
+WHEN BUILDING THE IMAGES FROM SOURCE, __FIRST BUILD KSTACK-KYLO AND THEN KSTACK-NIFI__.
+KSTACK KYLO WILL PUT KYLO-NIFI JARS AND NARS INTO SHARED VOLUME "NIFIDATA".
+NIFI WILL BAKE THESE JARS INTO THE IMAGE AT THE BUILD TIME.
+AFTER PRUNING THE SHARED VOLUME RUN docker build --no-cache -t kstack-kylo .
+MAKE SURE THE IMAGE IS PHYSICALLY REBUILT, NOT REUSED FROM CACHE.
+IF BUILT THE OTHER WAY, STATIC FILES FROM KYLO-LIB DIRECTORY WILL BE USED.
+
 ### Start swarm - one time init
 ```
 docker swarm init
@@ -121,6 +130,6 @@ make stop
 - docker-compose.yml:
     - change/parametrize MYSQL_ROOT_PASSWORD
 - externalize mariadb data directory volume? externalize kylo and nifi volumes with user data? (maybe elasticsearch too?)
-- make Kylo jars thinner, i.e. change jars and wars dependencies so that external framework libs (Spring) etc are in the image before Kylo jars (is this still useful since the kylo dev image only takes the kylo jars ?)
 - tune Elasticsearch
 - tune hadoop cluster
+- automate builds from Kylo GIT repo
