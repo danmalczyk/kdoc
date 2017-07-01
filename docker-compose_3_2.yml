@@ -22,7 +22,7 @@ services:
     networks:
       - kylonet          
   kylo:
-    image: dmalczyk/kstack-kylo:3.0
+    image: dmalczyk/kstack-kylo:3.2
     command: ["-d"]
     hostname: kylohost
     deploy:

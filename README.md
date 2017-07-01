@@ -60,7 +60,7 @@ docker swarm init #first-time init, no need to reissue
 
 6. Deploy Kylo stack
 ```
-docker stack deploy -c docker-compose.yml kylo_stack
+docker stack deploy -c docker-compose_3_0.yml kstack
 ```
 
 7. First time docker pulls all the images (6 GiB) and starts the stack,
@@ -118,7 +118,7 @@ make start-dev
 ### Stop stack
 ```
 make stop
-# alternatively docker stack rm kylo_stack
+# alternatively docker stack rm kstack
 ```
 
 ---
