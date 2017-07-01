@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#in case it's not done in build time
+mkdir -p $NIFI_INSTALL_HOME/data/lib/app
+cp $NIFI_SETUP_DIR/*.nar $NIFI_INSTALL_HOME/data/lib/
+cp $NIFI_SETUP_DIR/kylo-spark-*.jar $NIFI_INSTALL_HOME/data/lib/app/
+
 #/etc/hadoop_bootstrap.sh
 
 #setup Kylo database, service mariadb
