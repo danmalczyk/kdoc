@@ -115,7 +115,10 @@ RUN curl -s -o /opt/nifi/mysql/mariadb-java-client-1.5.7.jar https://downloads.m
 
 RUN echo "Copy the activeMQ required jars for the JMS processors to $NIFI_INSTALL_HOME/activemq"
 RUN mkdir $NIFI_INSTALL_HOME/activemq
-COPY activemq/*.jar $NIFI_INSTALL_HOME/activemq/
+#COPY activemq/*.jar $NIFI_INSTALL_HOME/activemq/
+RUN curl -s -o $NIFI_INSTALL_HOME/activemq/activemq-client-5.13.1.jar http://jcenter.bintray.com/org/apache/activemq/activemq-client/5.13.1/activemq-client-5.13.1.jar
+RUN curl -s -o $NIFI_INSTALL_HOME/activemq/geronimo-j2ee-management_1.1_spec-1.0.1.jar http://repo1.maven.org/maven2/org/apache/geronimo/specs/geronimo-j2ee-management_1.1_spec/1.0.1/geronimo-j2ee-management_1.1_spec-1.0.1.jar
+RUN curl -s -o $NIFI_INSTALL_HOME/activemq/hawtbuf-1.11.jar http://repo1.maven.org/maven2/org/fusesource/hawtbuf/hawtbuf/1.11/hawtbuf-1.11.jar
 
 RUN echo "setting up temporary database in case JMS goes down"
 RUN mkdir $NIFI_INSTALL_HOME/h2
