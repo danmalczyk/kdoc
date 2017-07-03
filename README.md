@@ -46,10 +46,10 @@ Increase memory dedicated for Docker (Preferences -> Advanced, currently 9G)
 ```
 docker login -u dockerhub_username -p dockerhub_passwd
 ```
-4. * download docker-compose_3_2.yml from danmalczyk/kdoc GitHub repo
-   * in the directory where docker-compose_3_2.yml is, create shared mountpoint for Kylo container:
+4. * download docker-compose_3_3.yml from danmalczyk/kdoc GitHub repo
+   * in the directory where docker-compose_3_3.yml is, create shared mountpoint for Kylo container:
 ```
-wget https://github.com/danmalczyk/kdoc/blob/master/docker-compose_3_2.yml
+wget https://github.com/danmalczyk/kdoc/blob/master/docker-compose_3_3.yml
 mkdir -p ./kylo-stack-mountpoints/kyloshare
 ```
 
@@ -65,8 +65,8 @@ docker pull docker.elastic.co/elasticsearch/elasticsearch:5.4.1
 docker pull rmohr/activemq:5.13.3
 docker pull mariadb:10.0
 docker pull dmalczyk/kstack-hadoophost:3.0
-docker pull dmalczyk/kstack-nifi:3.0
-docker pull dmalczyk/kstack-kylo:3.2
+docker pull dmalczyk/kstack-nifi:3.3
+docker pull dmalczyk/kstack-kylo:3.3
 ```
 6. Init docker swarm
 ```
@@ -75,7 +75,7 @@ docker swarm init #first-time init, no need to reissue
 
 7. Deploy Kylo stack
 ```
-docker stack deploy -c docker-compose_3_2.yml kstack
+docker stack deploy -c docker-compose_3_3.yml kstack
 ```
 
 8. Open Kylo from browser at localhost:8400 ("docker ps" must show 6 running containers, Kylo takes up to 15mins to start)

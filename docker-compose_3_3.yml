@@ -1,7 +1,7 @@
 version: "3"
 services:
   nifi:
-    image: dmalczyk/kstack-nifi:3.0
+    image: dmalczyk/kstack-nifi:3.3
     command: ["-d"]
     hostname: nifihost
     deploy:
@@ -22,7 +22,7 @@ services:
     networks:
       - kylonet          
   kylo:
-    image: dmalczyk/kstack-kylo:3.2
+    image: dmalczyk/kstack-kylo:3.3
     command: ["-d"]
     hostname: kylohost
     deploy:

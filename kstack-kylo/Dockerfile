@@ -97,11 +97,6 @@ ENV PATH $PATH:$KYLO_HOME
 COPY conf/application.properties /opt/kylo/kylo-services/conf/
 COPY conf/spark.properties /opt/kylo/kylo-services/conf
 
-# Align the same security.jwt.key as kylo-ui which is generated in kylo post-installation
-RUN jwtkey=$(grep 'security.jwt.key' /opt/kylo/kylo-ui/conf/application.properties | awk -F  "=" '/1/ {print $2}') && sed -i "s/security\.jwt\.key=<insert-256-bit-secret-key-here>/security\.jwt\.key=${jwtkey}/" /opt/kylo/kylo-services/conf/application.properties
-RUN echo "Kylo Installation complete"
-
-
 #install Kylo components to NiFi (and possibly start NiFi service)
 #ENV KYLO_INSTALL_NIFI_SUPPRESS_START "YES"
 #RUN echo "Install Kylo components to NiFi" && \
@@ -122,6 +117,11 @@ RUN ls $NIFI_INSTALL_HOME/data/lib
 RUN ls $NIFI_INSTALL_HOME/data/lib/app
 
 VOLUME $NIFI_INSTALL_HOME/data
+
+# Align the same security.jwt.key as kylo-ui which is generated in kylo post-installation
+RUN jwtkey=$(grep 'security.jwt.key' /opt/kylo/kylo-ui/conf/application.properties | awk -F  "=" '/1/ {print $2}') && sed -i "s/security\.jwt\.key=<insert-256-bit-secret-key-here>/security\.jwt\.key=${jwtkey}/" /opt/kylo/kylo-services/conf/application.properties
+RUN echo "Kylo Installation complete"
+
 # Add kylo and nifi user to supergroup otherwise kylo-spark-shell service which runs as kylo user will not be able to create database in hive.
 RUN groupadd supergroup
 RUN usermod -a -G supergroup kylo
