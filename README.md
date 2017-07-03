@@ -46,28 +46,39 @@ Increase memory dedicated for Docker (Preferences -> Advanced, currently 9G)
 ```
 docker login -u dockerhub_username -p dockerhub_passwd
 ```
-4. * download docker-compose_2_0.yml from danmalczyk/kdoc GitHub repo
-   * in the directory where docker-compose_2_0.yml is, create shared mountpoint for Kylo container:
+4. * download docker-compose_3_2.yml from danmalczyk/kdoc GitHub repo
+   * in the directory where docker-compose_3_2.yml is, create shared mountpoint for Kylo container:
 ```
-wget https://github.com/danmalczyk/kdoc/blob/master/docker-compose_2_0.yml
+wget https://github.com/danmalczyk/kdoc/blob/master/docker-compose_3_2.yml
 mkdir -p ./kylo-stack-mountpoints/kyloshare
 ```
- 
-5. Init docker swarm
+
+5. * download Makefile from danmalczyk/kdoc GitHub repo and run a task to download all the images needed:
+```
+https://github.com/danmalczyk/kdoc/blob/master/Makefile
+make fetch-stable
+```
+
+   * __OR__ *pull all the Kylo Stack images manually*
+```
+docker pull docker.elastic.co/elasticsearch/elasticsearch:5.4.1
+docker pull rmohr/activemq:5.13.3
+docker pull mariadb:10.0
+docker pull dmalczyk/kstack-hadoophost:3.0
+docker pull dmalczyk/kstack-nifi:3.0
+docker pull dmalczyk/kstack-kylo:3.2
+```
+6. Init docker swarm
 ```
 docker swarm init #first-time init, no need to reissue
 ```
 
-6. Deploy Kylo stack
+7. Deploy Kylo stack
 ```
-docker stack deploy -c docker-compose_3_0.yml kstack
+docker stack deploy -c docker-compose_3_2.yml kstack
 ```
 
-7. First time docker pulls all the images (6 GiB) and starts the stack,
-    it takes quite a long time ("docker events" will show the progress)
-    further boots are just service starts)
-
-8. Open Kylo from browser at localhost:8400 ("docker ps" must show 5 running containers, Kylo takes up to 15mins to start)
+8. Open Kylo from browser at localhost:8400 ("docker ps" must show 6 running containers, Kylo takes up to 15mins to start)
 
 ---
 
