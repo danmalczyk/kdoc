@@ -19,7 +19,7 @@ Everything Kylo-related and not needed in deployment-time should be in Kylo laye
 
 https://docs.google.com/presentation/d/1juClfDMePmRcdonlK6k4fmc5QAw3D9bvWAmDyemqe7c/edit#slide=id.g22f3240589_1_20
 
-## HOW TO RUN - tasks 1 - 5 are just first-time settings
+## HOW TO RUN - tasks 1 - 6 are just first-time settings
 1. Change "vm.max_map_count" kernel varialble in the VM running docker daemon: https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-cli-run-prod-mode.
 So if you are using macbook with Docker for Mac installed (note, docker for mac https://docs.docker.com/docker-for-mac/install/ is different from previous generation of docker on mac which is Docker machine https://docs.docker.com/machine/), then you can follow steps below
 ```
@@ -55,7 +55,7 @@ mkdir -p ./kylo-stack-mountpoints/kyloshare
 
 5. * download Makefile from danmalczyk/kdoc GitHub repo and run a task to download all the images needed:
 ```
-https://github.com/danmalczyk/kdoc/blob/master/Makefile
+wget https://github.com/danmalczyk/kdoc/blob/master/Makefile
 make fetch-stable
 ```
 
