@@ -64,7 +64,7 @@ make fetch-stable
 docker pull docker.elastic.co/elasticsearch/elasticsearch:5.4.1
 docker pull rmohr/activemq:5.13.3
 docker pull mariadb:10.0
-docker pull dmalczyk/kstack-hadoophost:3.0
+docker pull dmalczyk/kstack-hadoophost:2.0
 docker pull dmalczyk/kstack-nifi:3.3
 docker pull dmalczyk/kstack-kylo:3.3
 ```
