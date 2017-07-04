@@ -31,12 +31,15 @@ RUN chmod u+x ./install-nifi.sh && \
 #RUN tar -xzvf ./kylo-nifi-nars.tar.gz -C $NIFI_INSTALL_HOME/data/lib && rm ./kylo-nifi-nars.tar.gz
 #RUN tar -xzvf ./kylo-spark-jars.tar.gz -C $NIFI_INSTALL_HOME/data/lib/app && rm ./kylo-spark-jars.tar.gz
 
-VOLUME $NIFI_INSTALL_HOME/data
+VOLUME $NIFI_INSTALL_HOME/data/lib
 
 #install hadoop, spark and Hive clients
 #------------
 #Hadoop client config
 RUN curl -s http://www.eu.apache.org/dist/hadoop/common/hadoop-2.7.1/hadoop-2.7.1.tar.gz | tar -xz -C /usr/local/
+#COPY hadoopclient/hadoop-2.7.1.tar.gz .
+#RUN tar -xz -C /usr/local/ -f ./hadoop-2.7.1.tar.gz
+
 RUN cd /usr/local && ln -s ./hadoop-2.7.1 hadoop
 
 ENV HADOOP_HOME /usr/local/hadoop
@@ -57,6 +60,9 @@ ADD conf/hdfs-site.xml $HADOOP_PREFIX/etc/hadoop/hdfs-site.xml
 #Install spark to /usr/local/spark
 #support for Hadoop 2.6.0
 RUN curl -s http://d3kbcqa49mib13.cloudfront.net/spark-1.6.1-bin-hadoop2.6.tgz | tar -xz -C /usr/local/
+#COPY hadoopclient/spark-1.6.1-bin-hadoop2.6.tgz . 
+#RUN tar -xz -C /usr/local/ -f ./spark-1.6.1-bin-hadoop2.6.tgz
+
 RUN cd /usr/local && ln -s spark-1.6.1-bin-hadoop2.6 spark
 ENV SPARK_HOME /usr/local/spark
 
@@ -64,6 +70,9 @@ ENV PATH $SPARK_HOME/bin:$PATH
 
 # Install hive
 RUN curl -s http://apache.mirrors.spacedump.net/hive/hive-2.1.1/apache-hive-2.1.1-bin.tar.gz | tar -xz -C /usr/local/
+#COPY hadoopclient/apache-hive-2.1.1-bin.tar.gz .
+#RUN tar -xz -C /usr/local/ -f ./apache-hive-2.1.1-bin.tar.gz
+
 RUN cd /usr/local && ln -s apache-hive-2.1.1-bin hive
 COPY conf/hive-site.xml /usr/local/hive/conf
 RUN echo "export HIVE_HOME=/usr/local/hive" >> /etc/profile

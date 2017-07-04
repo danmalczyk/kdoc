@@ -1,7 +1,7 @@
 version: "3"
 services:
   nifi:
-    image: dmalczyk/kstack-nifi:3.3
+    image: dmalczyk/kstack-nifi:3.4
     command: ["-d"]
     hostname: nifihost
     deploy:
@@ -18,11 +18,11 @@ services:
     ports:
       - "8079:8079"
     volumes:
-      - nifidata:/opt/nifi/data
+      - nifilib:/opt/nifi/data/lib
     networks:
       - kylonet          
   kylo:
-    image: dmalczyk/kstack-kylo:3.3
+    image: dmalczyk/kstack-kylo:3.4
     command: ["-d"]
     hostname: kylohost
     deploy:
@@ -41,7 +41,7 @@ services:
       - "8888:8888"
       - "8420:8420"
     volumes:
-      - nifidata:/opt/nifi/data
+      - nifilib:/opt/nifi/data/lib
       - ./kylo-stack-mountpoints/kyloshare:/var/share
     networks:
       - kylonet          
@@ -147,7 +147,7 @@ services:
 #    networks:
 #      - kylonet
 volumes:
-  nifidata:
+  nifilib:
   esdata:
     driver: local
   dbinit:

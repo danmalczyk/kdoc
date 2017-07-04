@@ -18,7 +18,7 @@ services:
     ports:
       - "8079:8079"
     volumes:
-      - nifidata:/opt/nifi/data
+      - nifilib:/opt/nifi/data/lib
     networks:
       - kylonet          
   kylo:
@@ -41,12 +41,12 @@ services:
       - "8888:8888"
       - "8420:8420"
     volumes:
-      - nifidata:/opt/nifi/data
+      - nifilib:/opt/nifi/data/lib
       - ./kylo-stack-mountpoints/kyloshare:/var/share
     networks:
       - kylonet          
   hadoophost:
-    image: dmalczyk/kstack-hadoophost:latest
+    image: dmalczyk/kstack-hadoophost:2.0
     command: ["-d"]
     hostname: hadoophost
     deploy:
@@ -147,7 +147,7 @@ services:
 #    networks:
 #      - kylonet
 volumes:
-  nifidata:
+  nifilib:
   esdata:
     driver: local
   dbinit:
