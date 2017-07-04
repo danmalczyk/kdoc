@@ -4,8 +4,8 @@ ELASTICSEARCH_VERSION := 5.4.1
 ACTIVEMQ_VERSION := 5.13.3
 MARIADB_VERSION := 10.0
 HADOOPIMAGE_VERSION := 2.0
-NIFIIMAGE_VERSION := 3.3
-KYLOIMAGE_VERSION := 3.3
+NIFIIMAGE_VERSION := 3.4
+KYLOIMAGE_VERSION := 3.4
 
 .PHONY: all
 all: fetch build start
@@ -52,7 +52,7 @@ start-dev:
 .PHONY: start-stable
 start-stable:
 	@echo "Starting Kylo stack v. 3.3 ..."
-	@docker stack deploy -c docker-compose_3_3.yml kstack
+	@docker stack deploy -c docker-compose_3_4.yml kstack
 	@echo "Started stack"
 
 .PHONY: stop
