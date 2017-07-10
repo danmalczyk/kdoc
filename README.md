@@ -19,6 +19,8 @@ Everything Kylo-related and not needed in deployment-time should be in Kylo laye
 
 https://docs.google.com/presentation/d/1juClfDMePmRcdonlK6k4fmc5QAw3D9bvWAmDyemqe7c/edit#slide=id.g22f3240589_1_20
 
+Current status is as per slide above (separate containers for hadoop services and for NiFi)
+
 ## HOW TO RUN - tasks 1 - 6 are just first-time settings
 1. Change "vm.max_map_count" kernel varialble in the VM running docker daemon: https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-cli-run-prod-mode.
 So if you are using macbook with Docker for Mac installed (note, docker for mac https://docs.docker.com/docker-for-mac/install/ is different from previous generation of docker on mac which is Docker machine https://docs.docker.com/machine/), then you can follow steps below
@@ -84,20 +86,12 @@ docker stack deploy -c docker-compose_3_4.yml kstack
 
 ## DEVELOPER HOW-TO
 
-### REMEMBER
-WHEN BUILDING THE IMAGES FROM SOURCE, __FIRST BUILD KSTACK-KYLO AND THEN KSTACK-NIFI__.
-KSTACK KYLO WILL PUT KYLO-NIFI JARS AND NARS INTO SHARED VOLUME "NIFIDATA".
-NIFI WILL BAKE THESE JARS INTO THE IMAGE AT THE BUILD TIME.
-AFTER PRUNING THE SHARED VOLUME RUN docker build --no-cache -t kstack-kylo .
-MAKE SURE THE IMAGE IS PHYSICALLY REBUILT, NOT REUSED FROM CACHE.
-IF BUILT THE OTHER WAY, STATIC FILES FROM KYLO-LIB DIRECTORY WILL BE USED.
-
 ### Start swarm - one time init
 ```
 docker swarm init
 ```
 
-### Build from source and copy Kylo RPM to ./kstack-kylo2/kylo_rpm/kylo.rpm), tested with v. 0.8.2
+### Build from source and copy Kylo RPM to ./kstack-kylo/kylo_rpm/kylo.rpm), tested with v. 0.8.2
 
 ### Build kylo dev image
 Builds a kylo image with the latest kylo src. Check [kylo dev readme](kylo-dev/README.md)
@@ -136,7 +130,7 @@ make stop
 
 ## TODO
 - docker images should be ran with unpriviledged user (kylo/nifi)
-- add feed templates to the kylo prd image
+- add feed templates to the kylo prod image
 - run spark in yarn-cluster mode
 - docker-compose.yml:
     - change/parametrize MYSQL_ROOT_PASSWORD
