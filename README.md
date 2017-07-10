@@ -25,7 +25,7 @@ Current status is as per slide above (separate containers for hadoop services an
 1. Change "vm.max_map_count" kernel varialble in the VM running docker daemon: https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-cli-run-prod-mode.
 So if you are using macbook with Docker for Mac installed (note, docker for mac https://docs.docker.com/docker-for-mac/install/ is different from previous generation of docker on mac which is Docker machine https://docs.docker.com/machine/), then you can follow steps below
 ```
-# Launch a termal in your macbook and start a screen session to connect to the VM which is the host of docker containers
+# Launch a terminal in your macbook and start a screen session to connect to the VM which is the host of docker containers
 screen ~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty
 # Click "enter" once to get shell promot, then type in shell command "login"
 / # login
