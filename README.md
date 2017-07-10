@@ -82,6 +82,17 @@ docker stack deploy -c docker-compose_3_4.yml kstack
 
 8. Open Kylo from browser at localhost:8400 ("docker ps" must show 6 running containers, Kylo takes up to 15mins to start)
 
+9. For testing, use kylo template ./kstack-nifi/sample_data/data_ingest.zip , as the URLs must be changed according to the new hostnames, see below. Keep that in mind when creating/modifying further templates.
+
+## URL hostnames for stack services
+remember to use service names instead of localhost when calling different services:
+```
+kylo - for Kylo UI, Kylo services and Kylo Spark shell
+nifi - for NiFi
+mariadb - for the DB
+elasticsearch - for ElasticSearch
+hadoophost - for HDFS, Hive and Spark master. The hadoophost name is confusing as this is a service name. To be renamed to hadoopservice or hadoopmaster.
+```
 ---
 
 ## DEVELOPER HOW-TO
