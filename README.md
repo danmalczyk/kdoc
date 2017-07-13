@@ -24,6 +24,7 @@ As a goal, Kylo image docker build from sources should be matter of seconds rath
 Each layer should contain only the necessary minimums of settings needed to run with Kylo.
 
 Containers schema:
+
 https://docs.google.com/presentation/d/1juClfDMePmRcdonlK6k4fmc5QAw3D9bvWAmDyemqe7c/edit#slide=id.g22f3240589_1_20
 
 Current status is as per slide above (separate containers for hadoop services and for NiFi)
