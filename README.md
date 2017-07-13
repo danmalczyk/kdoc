@@ -105,7 +105,7 @@ docker swarm init
 ### Build from source and copy Kylo RPM to ./kstack-kylo/kylo_rpm/kylo.rpm), tested with v. 0.8.2
 
 ### Build kylo dev image
-Builds a kylo image with the latest kylo src. Check [kylo dev readme](kylo-dev/README.md)
+Builds a kylo image with the latest kylo src. Check [kylo dev readme](kstack-kylo-dev/README.md)
 
 ```
 cd kylo-dev
@@ -123,7 +123,7 @@ make start
 ```
 
 ### Start dev stack
-Runs a stack with the latest kylo src. Check [kylo dev readme](kylo-dev/README.md)
+Runs a stack with the latest kylo src. Check [kylo dev readme](kstack-kylo-dev/README.md)
 
 ```
 make start-dev
