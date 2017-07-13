@@ -1,26 +1,5 @@
 version: "3"
 services:
-  nifi:
-    image: kstack-nifi:latest
-    command: ["-d"]
-    hostname: nifihost
-    deploy:
-      replicas: 1
-      resources:
-        limits:
-          cpus: "1"
-          memory: "6.5G"
-      restart_policy:
-        condition: none
-        delay: 60s
-        max_attempts: 3
-        window: 180s        
-    ports:
-      - "8079:8079"
-    volumes:
-      - nifilib:/opt/nifi/data/lib
-    networks:
-      - kylonet          
   kylo:
     image: kstack-kylo:latest
     command: ["-d"]
@@ -45,10 +24,31 @@ services:
       - ./kylo-stack-mountpoints/kyloshare:/var/share
     networks:
       - kylonet          
-  hadoophost:
-    image: dmalczyk/kstack-hadoophost:2.0
+  nifi:
+    image: kstack-nifi:latest
     command: ["-d"]
-    hostname: hadoophost
+    hostname: nifihost
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "1"
+          memory: "6.5G"
+      restart_policy:
+        condition: none
+        delay: 60s
+        max_attempts: 3
+        window: 180s        
+    ports:
+      - "8079:8079"
+    volumes:
+      - nifilib:/opt/nifi/data/lib
+    networks:
+      - kylonet          
+  hadoopservice:
+    image: dmalczyk/kstack-hadoopservice:3.5
+    command: ["-d"]
+    hostname: hadoopservice
     deploy:
       replicas: 1
       resources:

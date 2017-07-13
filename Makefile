@@ -24,7 +24,7 @@ fetch-stable:
 	@docker pull docker.elastic.co/elasticsearch/elasticsearch:$(ELASTICSEARCH_VERSION)
 	@docker pull rmohr/activemq:$(ACTIVEMQ_VERSION)
 	@docker pull mariadb:$(MARIADB_VERSION)
-	@docker pull dmalczyk/kstack-hadoophost:$(HADOOPIMAGE_VERSION)
+	@docker pull dmalczyk/kstack-hadoopservice:$(HADOOPIMAGE_VERSION)
 	@docker pull dmalczyk/kstack-nifi:$(NIFIIMAGE_VERSION)
 	@docker pull dmalczyk/kstack-kylo:$(KYLOIMAGE_VERSION)
 	@echo "Fetch finished"
@@ -33,7 +33,7 @@ fetch-stable:
 build:
 	@echo "Building images ..."
 	@docker build -t dmalczyk/kstack-nifi ./kstack-nifi
-	@docker build -t dmalczyk/kstack-hadoophost ./kstack-hadoophost
+	@docker build -t dmalczyk/kstack-hadoopservice ./kstack-hadoopservice
 	@docker build -t dmalczyk/kstack-kylo ./kstack-kylo
 	@echo "Build finished"
 
@@ -52,7 +52,7 @@ start-dev:
 .PHONY: start-stable
 start-stable:
 	@echo "Starting Kylo stack v. 3.3 ..."
-	@docker stack deploy -c docker-compose_3_4.yml kstack
+	@docker stack deploy -c docker-compose_3_5.yml kstack
 	@echo "Started stack"
 
 .PHONY: stop
